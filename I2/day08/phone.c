@@ -74,19 +74,16 @@ int main(int argc, char **argv) {
     printf("connected.\n");
   }
   
-  FILE *rec = popen("rec -t raw -c 1 -r 44100 -", "r");
-
   while (1) {
     if (mode == GUEST) {
       // send
       short buf;
-      int n = read(rec, &buf, sizeof(short));
+      int n = read(stdin, &buf, sizeof(short));
       if (n == 0) {
         // EOF
         break;
       }
       int m = send(s, &buf, sizeof(short), 0);
-      assert(n == m);
 
       // recv
       n = recv(s, &buf, sizeof(short), 0);
@@ -105,17 +102,15 @@ int main(int argc, char **argv) {
       }
       fwrite(&buf, sizeof(short), 1, stdout);
       // send
-      n = read(rec, &buf, sizeof(short));
+      n = read(stdin, &buf, sizeof(short));
       if (n == 0) {
         // EOF
         break;
       }
       int m = send(s, &buf, sizeof(short), 0);
-      assert(n == m);
     }
   }
 
-  pclose(rec);
   close(s);
   return 0;
 }
