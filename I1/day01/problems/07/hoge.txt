@@ -1,0 +1,53 @@
+
+}
+;0 nruter  
+;)s(eerf  
+}  
+;)]i[s(rahctup    
+{ )--i ;0 => i ;1 - dne = i( rof  
+;i tni  
+/* gninnigeb ot dne morf s tnirp */  
+}  
+;t = s    
+;)dne ,t ,s(ypocb    
+;)t(tressa    
+/* reffub wen */ ;)dne(collam)* rahc( = t* rahc    
+;01 =+ dne    
+;dne = nigeb    
+/* setyb 01 yb s dnetxe ew       
+.elif fo dne dehcaer ton evah ew dna lluf si s */    
+}    
+;kaerb      
+;r + nigeb = dne      
+/* elif fo dne dehcaer */      
+{ )nigeb - dne < r( fi    
+;)pf ,nigeb - dne ,1 ,nigeb + s(daerf = r tni    
+/* )setyb )nigeb - dne(( erots nac s sa setyb ynam sa daer */    
+{ )1( elihw  
+;)dne(collam)* rahc( = s * rahc  
+;01 = dne tni  
+;0 = nigeb tni  
+/* )setyb 01( llams yllaitini si s */  
+;)"br" ,]1[vgra(nepof = pf * ELIF  
+/* s otni elif eht     
+ fo stnetnoc elohw eht daer ot yrt */  
+{
+)vgra ** rahc ,cgra tni(niam tni
+
+>h.tressa< edulcni#
+>h.sgnirts< edulcni#
+>h.bildts< edulcni#
+>h.oidts< edulcni#
+
+/* 
+yrassecen nehw ti sworg dna yllacimanyd yromem * 
+setacolla ti ,nwonknu si elif eht fo ezis eht ecniS * 
+.redro esrever eht ni * 
+ti ni sretcarahc tnirp dna ,enil dnammoc eht ni * 
+nevig elif eht fo stnetnoc eht sdaer tsrif tI * 
+ * 
+roivaheb dednetnI * 
+* 
+emanelif tuo.a/.   * 
+* :egasu * * c.70p * 
+ */
