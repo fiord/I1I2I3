@@ -76,8 +76,8 @@ int main(int argc, char **argv) {
     fprintf(stderr, "connected.\n");
   }
   
-  short *buf = (short*)malloc(sizeof(short) * N);
   while (1) {
+    short *buf = (short*)malloc(sizeof(short) * N);
     // send
     int n = fread(buf, sizeof(short), N, stdin);
     if (n == 0) {
