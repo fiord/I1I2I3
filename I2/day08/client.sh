@@ -1,2 +1,2 @@
 #!/bin/sh
-./phone $0 12345 | play -t raw -c 1 -r 44100 -
+./phone $0 12345 | play -t raw -b 16 -c 1 -e s -r 44100 -
