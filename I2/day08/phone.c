@@ -79,41 +79,42 @@ int main(int argc, char **argv) {
   while (1) {
     if (mode == GUEST) {
       // send
-      char buf;
-      int n = fread(&buf, sizeof(char), 1, rec);
+      short buf;
+      int n = fread(&buf, sizeof(short), 1, rec);
       if (n == 0) {
         // EOF
         break;
       }
-      int m = send(s, &buf, sizeof(char), 0);
+      int m = send(s, &buf, sizeof(short), 0);
       assert(n == m);
 
       // recv
-      n = recv(s, &buf, sizeof(char), 0);
+      n = recv(s, &buf, sizeof(short), 0);
       if (n == 0) {
         // EOF
         break;
       }
-      fwrite(&buf, sizeof(char), 1, stdout);
+      fwrite(&buf, sizeof(short), 1, stdout);
     }
     else {
       // recv
       char buf;
-      int n = recv(s, &buf, sizeof(char), 0);
+      int n = recv(s, &buf, sizeof(short), 0);
       if (n == 0) {
         break;
       }
-      fwrite(&buf, sizeof(char), 1, stdout);
+      fwrite(&buf, sizeof(short), 1, stdout);
       // send
-      n = fread(&buf, sizeof(char), 1, rec);
+      n = fread(&buf, sizeof(short), 1, rec);
       if (n == 0) {
         // EOF
         break;
       }
-      int m = send(s, &buf, sizeof(char), 0);
+      int m = send(s, &buf, sizeof(short), 0);
       assert(n == m);
     }
   }
+
   pclose(rec);
   close(s);
   return 0;
