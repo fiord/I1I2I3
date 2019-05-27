@@ -15,6 +15,8 @@
 #define TCP_STREAM SOCK_STREAM
 #define UDP_STREAM SOCK_DGRAM
 
+const int N = 44100;
+
 enum MODE {
   HOST,
   GUEST,
@@ -74,27 +76,26 @@ int main(int argc, char **argv) {
     fprintf(stderr, "connected.\n");
   }
   
+  short *buf = (short*)malloc(sizeof(short) * N);
   while (1) {
     // send
-    short buf;
-    int n = fread(&buf, sizeof(short), 1, stdin);
+    int n = fread(buf, sizeof(short), N, stdin);
     if (n == 0) {
       // EOF
       break;
     }
-    int m = send(s, &buf, sizeof(short), 0);
-    fprintf(stderr, "send\n");
-    usleep(1000);
+    int m = send(s, buf, sizeof(short) * N, 0);
+    // fprintf(stderr, "send\n");
+
 
     // recv
-    n = recv(s, &buf, sizeof(short), 0);
+    n = recv(s, &buf, sizeof(short) * N, 0);
     if (n == 0) {
       // EOF
       break;
     }
-    fwrite(&buf, sizeof(short), 1, stdout);
-    fprintf(stderr, "recv\n");
-    usleep(1000);
+    fwrite(&buf, sizeof(short), n / 2, stdout);
+    // fprintf(stderr, "recv\n");
   }
 
   close(s);
