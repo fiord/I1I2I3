@@ -75,40 +75,22 @@ int main(int argc, char **argv) {
   }
   
   while (1) {
-    if (mode == GUEST) {
-      // send
-      short buf;
-      int n = read(stdin, &buf, sizeof(short));
-      if (n == 0) {
-        // EOF
-        break;
-      }
-      int m = send(s, &buf, sizeof(short), 0);
+    // send
+    short buf;
+    int n = read(stdin, &buf, sizeof(short));
+    if (n == 0) {
+      // EOF
+      break;
+    }
+    int m = send(s, &buf, sizeof(short), 0);
 
-      // recv
-      n = recv(s, &buf, sizeof(short), 0);
-      if (n == 0) {
-        // EOF
-        break;
-      }
-      fwrite(&buf, sizeof(short), 1, stdout);
+    // recv
+    n = recv(s, &buf, sizeof(short), 0);
+    if (n == 0) {
+      // EOF
+      break;
     }
-    else {
-      // recv
-      char buf;
-      int n = recv(s, &buf, sizeof(short), 0);
-      if (n == 0) {
-        break;
-      }
-      fwrite(&buf, sizeof(short), 1, stdout);
-      // send
-      n = read(stdin, &buf, sizeof(short));
-      if (n == 0) {
-        // EOF
-        break;
-      }
-      int m = send(s, &buf, sizeof(short), 0);
-    }
+    fwrite(&buf, sizeof(short), 1, stdout);
   }
 
   close(s);
