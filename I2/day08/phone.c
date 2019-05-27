@@ -76,13 +76,15 @@ int main(int argc, char **argv) {
   
   while (1) {
     // send
-    short buf;
-    int n = read(stdin, &buf, sizeof(short));
+    short buf[4410];
+    int n = fread(&buf, sizeof(short), 4410, stdin);
     if (n == 0) {
       // EOF
       break;
     }
     int m = send(s, &buf, sizeof(short), 0);
+    fprintf(stderr, "send\n");
+    usleep(50*1000);
 
     // recv
     n = recv(s, &buf, sizeof(short), 0);
@@ -90,7 +92,9 @@ int main(int argc, char **argv) {
       // EOF
       break;
     }
-    fwrite(&buf, sizeof(short), 1, stdout);
+    fwrite(&buf, sizeof(short), n / 2, stdout);
+    fprintf(stderr, "recv\n");
+    usleep(50*1000);
   }
 
   close(s);
