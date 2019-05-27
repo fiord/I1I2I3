@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
     if (mode == GUEST) {
       // send
       short buf;
-      int n = fread(&buf, sizeof(short), 1, rec);
+      int n = read(rec, &buf, sizeof(short));
       if (n == 0) {
         // EOF
         break;
@@ -105,7 +105,7 @@ int main(int argc, char **argv) {
       }
       fwrite(&buf, sizeof(short), 1, stdout);
       // send
-      n = fread(&buf, sizeof(short), 1, rec);
+      n = read(rec, &buf, sizeof(short));
       if (n == 0) {
         // EOF
         break;
