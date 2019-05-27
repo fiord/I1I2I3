@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
     s = accept(ss, (struct sockaddr*)&client_addr, &len);
 
     close(ss);
-    printf("connected.\n");
+    fprintf(stderr, "connected.\n");
   }
   else if(argc == 3) {
     // guest
@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
       fprintf(stderr, "print error code: %d\n", num);
     }
     assert(ret != -1);
-    printf("connected.\n");
+    fprintf(stderr, "connected.\n");
   }
   
   while (1) {
