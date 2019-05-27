@@ -36,6 +36,7 @@ int main(int argc, char **argv) {
     s = accept(ss, (struct sockaddr*)&client_addr, &len);
 
     close(ss);
+    printf("connected.\n");
   }
   else if(argc == 3) {
     // guest
@@ -51,6 +52,7 @@ int main(int argc, char **argv) {
     addr.sin_port = htons(to_port);
     ret = connect(s, (struct sockaddr*)&addr, sizeof(addr));
     assert(ret != -1);
+    printf("connected.\n");
   }
   
   FILE *rec = popen("rec -t raw -c 1 -r 44100 -", "r");
