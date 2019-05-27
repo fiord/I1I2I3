@@ -87,7 +87,6 @@ int main(int argc, char **argv) {
       }
       int m = send(s, &buf, sizeof(char), 0);
       assert(n == m);
-      fprintf(stderr, "sended\n");
 
       // recv
       n = recv(s, &buf, sizeof(char), 0);
@@ -96,7 +95,6 @@ int main(int argc, char **argv) {
         break;
       }
       fwrite(&buf, sizeof(char), 1, stdout);
-      fprintf(stderr, "received\n");
     }
     else {
       // recv
@@ -106,7 +104,6 @@ int main(int argc, char **argv) {
         break;
       }
       fwrite(&buf, sizeof(char), 1, stdout);
-      fprintf(stderr, "received\n");
       // send
       n = fread(&buf, sizeof(char), 1, rec);
       if (n == 0) {
@@ -114,7 +111,6 @@ int main(int argc, char **argv) {
         break;
       }
       int m = send(s, &buf, sizeof(char), 0);
-      fprintf(stderr, "sended\n");
       assert(n == m);
     }
   }
