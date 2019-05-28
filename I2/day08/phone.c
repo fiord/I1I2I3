@@ -56,6 +56,7 @@ int connect_server(char **argv) {
   addr.sin_port = htons(to_port);
   ret = connect(s, (struct sockaddr*)&addr, sizeof(addr));
   if (ret == -1)  die("connect failed");
+  fprintf(stderr, "connection success\n");
 
   return s;
 }

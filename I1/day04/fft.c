@@ -121,6 +121,7 @@ void ifft(complex double * y,
 
 int pow2check(long N) {
   long n = N;
+  if (n < 4)  return 0;
   while (n > 1) {
     if (n % 2) return 0;
     n = n / 2;
@@ -151,20 +152,28 @@ int main(int argc, char ** argv) {
   long to = atol(argv[3]);
   FILE * wp = fopen("fft.dat", "wb");
   if (wp == NULL) die("fopen");
-  sample_t * buf = calloc(sizeof(sample_t), n);
+  // 最初の1度だけ特殊な処理をします
+  int first = 1;
+  sample_t * buf = (sample_t*)malloc(sizeof(sample_t) * n);
+  sample_t * buf_out = (sample_t*)malloc(sizeof(sample_t) * n);
   complex double * X = calloc(sizeof(complex double), n);
   complex double * Y = calloc(sizeof(complex double), n);
   while (1) {
     /* 標準入力からn個標本を読む */
-    ssize_t m = read_n(0, n * sizeof(sample_t), buf);
+    fprintf(stderr, "check: %d %d\n", buf, buf_out);
+    ssize_t m;
+    if (first) m = read_n(0, n * sizeof(sample_t), buf);
+    else m = read_n(0, (n / 2) * sizeof(sample_t), buf + (n / 2));
+    fprintf(stderr, "%d %d\n", first, m);
+
     if (m == 0) break;
     /* 複素数の配列に変換 */
     sample_to_complex(buf, X, n);
     /* FFT -> Y */
     fft(X, Y, n);
     
-    print_complex(wp, Y, n);
-    fprintf(wp, "----------------\n");
+    // print_complex(wp, Y, n);
+    // fprintf(wp, "----------------\n");
     // filter
     // 44100Hz -> n個からfilter
     // 周波数は44100/n倍されるので，処理すること．
@@ -178,9 +187,21 @@ int main(int argc, char ** argv) {
     /* IFFT -> Z */
     ifft(Y, X, n);
     /* 標本の配列に変換 */
-    complex_to_sample(X, buf, n);
+    complex_to_sample(X, buf_out, n);
     /* 標準出力へ出力 */
-    write_n(1, m, buf);
+    if (first) {
+      // 前3/4を出力
+      fprintf(stderr, "%d\n", write_n(1, n * 3 / 4 * sizeof(sample_t), buf_out));
+    }
+    else {
+      // 中心1/2を出力
+      fprintf(stderr, "%d\n", write_n(1, n / 2 * sizeof(sample_t), buf_out + n / 4));
+    }
+    // bufferをずらしておく
+    for(int i = n / 2, j = 0; i < n; i++, j++) {
+      buf[j] = buf[i];
+    }
+    first = 0;
   }
   fclose(wp);
   return 0;
