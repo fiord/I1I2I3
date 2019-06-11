@@ -5,9 +5,9 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cassert>
+#include <cstdio>
+#include <cstdlib>
 #define TCP_STREAM SOCK_STREAM
 #define UDP_STREAM SOCK_DGRAM
 #define PACKET_SIZE 1024
