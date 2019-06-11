@@ -1,3 +1,0 @@
-/home/denjo/Documents/experiment/I/I3/img/CMakeFiles/rebuild_cache.dir
-/home/denjo/Documents/experiment/I/I3/img/CMakeFiles/phone.dir
-/home/denjo/Documents/experiment/I/I3/img/CMakeFiles/edit_cache.dir
