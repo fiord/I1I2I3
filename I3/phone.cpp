@@ -26,19 +26,38 @@
 
 int main(int argc, char **argv) {
   int s;
-  if (argc == 2) {
-    s = start_server(argv[1]);
-  }
-  else if(argc == 3) {
-    s = connect_server(argv[1], argv[2]);
+  std::thread video_thread;
+
+  if (argc >= 2) {
+    if (argv[1] == "sound")  {
+      if (argc == 3) {
+        s = start_server(argv[2]);
+      }
+      else if(argc == 4) {
+        s = connect_server(argv[2], argv[3]);
+      }
+      else {
+        die("wrong usage: ./phone sound [port] or ./phone sound [ip] [port]\n");
+      }
+    }
+    else if (argv[1] == "video") {
+      if (argc == 4) {
+        s = start_server(argv[2]);
+        video_thread = std::thread(video_server, argv[3]);
+      }
+      else if (argc == 5) {
+        s = connect_server(argv[2], argv[3]);
+        video_thread = std::thread(video_client, argv[2], argv[4]);
+      }
+      else {
+        die("wrong usage: ./phone video [port] [port] or ./phone video [ip] [port] [port]\n");
+      }
+    }
   }
   else {
-    die("wrong usage\n");
+    die("wrong usage: ./phone (sound|video)\n");
   }
-#ifdef USE_VIDEO
-  cv::VideoCapture cap = init();
-#endif
-    
+
   char *buf = (char*)malloc(sizeof(char) * PACKET_SIZE);
   while (1) {
     
@@ -50,18 +69,6 @@ int main(int argc, char **argv) {
     fprintf(stderr, "send: mode=%d, size=%d\n", mode, m);
     fprintf(stderr, "finished sending sound data\n");
 #endif
-#ifdef USE_VIDEO
-    cv::Mat img;
-    get_image(cap, img);
-    int img_size = sizeof(img);
-    m = send(s, &img_size, sizeof(img_size), 0);
-    if (m !=  sizeof(img_size)) die("failed to send img_size data\n");
-    m = send(s, &img, sizeof(img), 0);
-    if (m != sizeof(img)) die("failed to send img data\n");
-#ifdef DEBUG
-    fprintf(stderr, "finished sending img data\n");
-#endif
-#endif
 
     n = recv(s, buf, sizeof(char) * PACKET_SIZE, 0);
     fwrite(buf, sizeof(char), n, stdout);
@@ -69,22 +76,7 @@ int main(int argc, char **argv) {
     fprintf(stderr, "recv: mode=%d, size=%d\n", mode, n);
     fprintf(stderr, "finished getting sound data\n");
 #endif
-#ifdef USE_VIDEO
-    img_size = recv(s, &img_size, sizeof(img_size), 0);
-    img = recv(s, &img, img_size, 0);
-    print_image(img);
-#ifdef DEBUG
-    fprintf(stderr, "finished getting img data\n");
-#endif
-
-    if (check_key()) {
-      break;
-    }
-#endif
   }
-#ifdef USE_VIDEO
-  cv::destroyAllWindows();
-#endif USE_VIDEO
   close(s);
   return 0;
 }
