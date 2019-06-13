@@ -14,7 +14,7 @@
 #define UDP_STREAM SOCK_DGRAM
 #define PACKET_SIZE 1024
 
-#define DEBUG
+#undef DEBUG
 
 #include "voice.hpp"
 
@@ -90,9 +90,9 @@ int main(int argc, char **argv) {
     int l = send(s, &mode, sizeof(int), 0);
     if (l != sizeof(int)) die("failes to send mode\n");
     int m = send(s, buf, mode, 0);
-    fprintf(stderr, "send: mode=%d, size=%d\n", mode, m);
     if (mode != m) die("failed to send data\n");
 #ifdef DEBUG
+    fprintf(stderr, "send: mode=%d, size=%d\n", mode, m);
     fprintf(stderr, "finished sending sound data\n");
 #endif
 #ifdef USE_VIDEO
@@ -110,9 +110,9 @@ int main(int argc, char **argv) {
 
     l = recv(s, &mode, sizeof(int), 0);
     n = recv(s, buf, sizeof(char) * mode, 0);
-    fprintf(stderr, "recv: mode=%d, size=%d\n", mode, n);
     fwrite(buf, sizeof(char), n, stdout);
 #ifdef DEBUG
+    fprintf(stderr, "recv: mode=%d, size=%d\n", mode, n);
     fprintf(stderr, "finished getting sound data\n");
 #endif
 #ifdef USE_VIDEO
