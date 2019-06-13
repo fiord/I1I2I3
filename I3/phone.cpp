@@ -8,12 +8,15 @@
 #include <cassert>
 #include <cstdio>
 #include <cstdlib>
+#include <limits.h>
 #include "die.hpp"
 #define TCP_STREAM SOCK_STREAM
 #define UDP_STREAM SOCK_DGRAM
 #define PACKET_SIZE 1024
 
 #define DEBUG
+
+#include "voice.hpp"
 
 #undef USE_VIDEO
 #ifdef USE_VIDEO
@@ -81,9 +84,13 @@ int main(int argc, char **argv) {
     
   char *buf = (char*)malloc(sizeof(char) * PACKET_SIZE);
   while (1) {
+    
     int n = fread(buf, sizeof(char), PACKET_SIZE, stdin);
-    int m = send(s, buf, n, 0);
-    if (n != m) die("failed to send data\n");
+    int mode = get_mode(buf, n);
+    int l = send(s, &mode, sizeof(int), 0);
+    if (l != sizeof(int)) die("failes to send mode\n");
+    int m = send(s, buf, mode, 0);
+    if (mode != m) die("failed to send data\n");
 #ifdef DEBUG
     fprintf(stderr, "finished sending sound data\n");
 #endif
@@ -100,7 +107,9 @@ int main(int argc, char **argv) {
 #endif
 #endif
 
-    n = recv(s, buf, sizeof(char) * PACKET_SIZE, 0);
+    l = recv(s, &mode, sizeof(int), 0);
+    n = recv(s, buf, sizeof(char) * mode, 0);
+    if (n != sizeof(char) * mode) die("failed to get sound data\n");
     fwrite(buf, sizeof(char), n, stdout);
     fprintf(stderr, "finished getting sound data\n");
 #ifdef USE_VIDEO
