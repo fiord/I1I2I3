@@ -7,10 +7,9 @@
 
 #define cut_volume 50
 
-int get_mode(char *buf, int n) {
+void zero_fill(char *buf) {
   for (int i=0; i<n; i++) {
-    if (abs(buf[i]) < cut_volume) return n;
+    if (abs(buf[i]) < cut_volume) buf[i] = 0;
   }
-  return 0;
 }
 #endif // INCLUDE_GUARD_VOICE_HPP

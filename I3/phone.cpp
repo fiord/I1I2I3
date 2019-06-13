@@ -86,11 +86,9 @@ int main(int argc, char **argv) {
   while (1) {
     
     int n = fread(buf, sizeof(char), PACKET_SIZE, stdin);
-    int mode = get_mode(buf, n);
-    int l = send(s, &mode, sizeof(int), 0);
-    if (l != sizeof(int)) die("failes to send mode\n");
-    int m = send(s, buf, mode, 0);
-    if (mode != m) die("failed to send data\n");
+    zero_fill(buf);
+    int m = send(s, buf, PACKET_SIZE, 0);
+    if (PACKET_SIZE != m) die("failed to send data\n");
 #ifdef DEBUG
     fprintf(stderr, "send: mode=%d, size=%d\n", mode, m);
     fprintf(stderr, "finished sending sound data\n");
@@ -108,8 +106,7 @@ int main(int argc, char **argv) {
 #endif
 #endif
 
-    l = recv(s, &mode, sizeof(int), 0);
-    n = recv(s, buf, sizeof(char) * mode, 0);
+    n = recv(s, buf, sizeof(char) * PACKET_SIZE, 0);
     fwrite(buf, sizeof(char), n, stdout);
 #ifdef DEBUG
     fprintf(stderr, "recv: mode=%d, size=%d\n", mode, n);
