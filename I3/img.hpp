@@ -7,18 +7,16 @@
 
 cv::VideoCapture init() {
   cv::VideoCapture cap(0);
-  if (cap.isOpened()) {
+  if (!cap.isOpened()) {
     die("failed to open camera");
   }
 
   return cap;
 }
 
-cv::Mat get_image(cv::VideoCapture &cap) {
-  cv::Mat image;
-
+void get_image(cv::VideoCapture &cap, cv::Mat &image) {
   if (cap.read(image)) {
-    return image;
+    return;
   }
   die("failed to read image");
 }

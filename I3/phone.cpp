@@ -76,14 +76,23 @@ int main(int argc, char **argv) {
     int n = fread(buf, sizeof(char), PACKET_SIZE, stdin);
     int m = send(s, buf, n, 0);
     if (n != m) die("failed to send data\n");
-    cv::Mat img = get_image(cap);
+    fprintf(stderr, "finished sending sound data\n");
+    cv::Mat img;
+    get_image(cap, img);
+    int img_size = sizeof(img);
+    m = send(s, &img_size, sizeof(img_size), 0);
+    if (m !=  sizeof(img_size)) die("failed to send img_size data\n");
     m = send(s, &img, sizeof(img), 0);
     if (m != sizeof(img)) die("failed to send img data\n");
+    fprintf(stderr, "finished sending img data\n");
 
     n = recv(s, buf, sizeof(char) * PACKET_SIZE, 0);
     fwrite(buf, sizeof(char), n, stdout);
-    img = recv(s, &img, sizeof(img), 0);
+    fprintf(stderr, "finished getting sound data\n");
+    img_size = recv(s, &img_size, sizeof(img_size), 0);
+    img = recv(s, &img, img_size, 0);
     print_image(img);
+    fprintf(stderr, "finished getting img data\n");
 
     if (check_key()) {
       break;
