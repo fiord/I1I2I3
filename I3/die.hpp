@@ -3,8 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void die(char *s) {
-  std::perror(s);
-  std::exit(-1);
-}
+void die(char *s);
+
 #endif // INCLUDE_GUARD_DIE_HPP

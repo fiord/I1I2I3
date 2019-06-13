@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 2.8)
 project(img)
 find_package(OpenCV REQUIRED)
-add_executable(phone phone.cpp)
+add_executable(phone
+  phone.cpp
+  die.cpp
+  connect.cpp
+)
 target_link_libraries(phone ${OpenCV_LIBS})
