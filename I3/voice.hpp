@@ -3,12 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <cmath>
 
-#define cut_volume -50
+#define cut_volume 50
 
 int get_mode(char *buf, int n) {
   for (int i=0; i<n; i++) {
-    if (buf[i] > cut_volume) return n;
+    if (abs(buf[i]) < cut_volume) return n;
   }
   return 0;
 }
