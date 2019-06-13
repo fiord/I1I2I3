@@ -90,6 +90,7 @@ int main(int argc, char **argv) {
     int l = send(s, &mode, sizeof(int), 0);
     if (l != sizeof(int)) die("failes to send mode\n");
     int m = send(s, buf, mode, 0);
+    fprintf(stderr, "send: mode=%d, size=%d\n", mode, m);
     if (mode != m) die("failed to send data\n");
 #ifdef DEBUG
     fprintf(stderr, "finished sending sound data\n");
@@ -109,9 +110,12 @@ int main(int argc, char **argv) {
 
     l = recv(s, &mode, sizeof(int), 0);
     n = recv(s, buf, sizeof(char) * mode, 0);
+    fprintf(stderr, "recv: mode=%d, size=%d\n", mode, n);
     if (n != sizeof(char) * mode) die("failed to get sound data\n");
     fwrite(buf, sizeof(char), n, stdout);
+#ifdef DEBUG
     fprintf(stderr, "finished getting sound data\n");
+#endif
 #ifdef USE_VIDEO
     img_size = recv(s, &img_size, sizeof(img_size), 0);
     img = recv(s, &img, img_size, 0);
