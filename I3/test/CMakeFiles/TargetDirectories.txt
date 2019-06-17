@@ -1,3 +1,0 @@
-/home/denjo/Documents/experiment/I/I3/test/CMakeFiles/rebuild_cache.dir
-/home/denjo/Documents/experiment/I/I3/test/CMakeFiles/test.dir
-/home/denjo/Documents/experiment/I/I3/test/CMakeFiles/edit_cache.dir
