@@ -56,20 +56,20 @@ int main(int argc, char **argv) {
     die("wrong usage: ./phone (sound|video)\n");
   }
 
-  char *buf = (char*)malloc(sizeof(char) * PACKET_SIZE);
+  short *buf = (short*)malloc(sizeof(short) * PACKET_SIZE);
   while (1) {
     
-    int n = fread(buf, sizeof(char), PACKET_SIZE, stdin);
-    zero_fill(buf);
+    int n = fread(buf, sizeof(short), PACKET_SIZE, stdin);
+    // zero_fill(buf);
     int m = send(s, buf, PACKET_SIZE, 0);
-    if (PACKET_SIZE != m) die("failed to send sound data\n");
+    if (n!= m) die("failed to send sound data\n");
 #ifdef DEBUG
     fprintf(stderr, "send: mode=%d, size=%d\n", mode, m);
     fprintf(stderr, "finished sending sound data\n");
 #endif
 
-    n = recv(s, buf, sizeof(char) * PACKET_SIZE, 0);
-    fwrite(buf, sizeof(char), n, stdout);
+    n = recv(s, buf, sizeof(short) * PACKET_SIZE, 0);
+    fwrite(buf, sizeof(short), n, stdout);
 #ifdef DEBUG
     fprintf(stderr, "recv: mode=%d, size=%d\n", mode, n);
     fprintf(stderr, "finished getting sound data\n");
