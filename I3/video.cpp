@@ -40,14 +40,10 @@ void send_recv(int s) {
 
 }
 
-void video_server(char *port) {
-  int s = start_server(port);
-
-  send_recv(s);
+void video_server(int socket) {
+  send_recv(socket);
 }
 
-void video_client(char *ip, char *port) {
-  int s = connect_server(ip, port);
-
-  send_recv(s);
+void video_client(int socket) {
+  send_recv(socket);
 }

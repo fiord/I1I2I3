@@ -7,8 +7,8 @@
 
 static void send_recv(int);
 
-extern void video_server(char*);
+extern void video_server(int);
 
-extern void video_client(char*, char*);
+extern void video_client(int);
 
 #endif // INCLUDE_GUARD_IMG_HPP
