@@ -39,12 +39,12 @@ int main(int argc, char **argv) {
       }
     }
     else if (strcmp(argv[1], "video") == 0) {
-      if (argc == 4) {
-        int t = start_server(argv[3]);
+      if (argc == 3) {
+        int t = start_server(argv[2]);
         send_recv(t);
       }
-      else if (argc == 5) {
-        int t = connect_server(argv[2], argv[4]);
+      else if (argc == 4) {
+        int t = connect_server(argv[2], argv[3]);
         send_recv(t);
       }
       else {
