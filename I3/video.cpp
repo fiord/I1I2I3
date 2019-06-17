@@ -29,7 +29,7 @@ void send_recv(int s) {
     if (m != sizeof(send_img))  die("failed to send img data\n");
 
     // 受信・表示
-    m = recv(s, &img, sizeof(send_img), 0);
+    m = recv(s, &send_img, sizeof(send_img), 0);
     fprintf(stderr, "recv: recv_size=%d\n", m);
     cv::imshow("tvphone", img);
 
