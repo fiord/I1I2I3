@@ -1,6 +1,7 @@
-*/document.*
-*/CMakeCache.txt
-*/CMakeFiles/*
-*/cmake_install.cmake
-*/Makefile
+**/document.*
+**/CMakeCache.txt
+**/CMakeFiles/*
+**/cmake_install.cmake
+**/Makefile
 I3/phone
+I3/test/test
