@@ -40,14 +40,12 @@ int main(int argc, char **argv) {
     }
     else if (strcmp(argv[1], "video") == 0) {
       if (argc == 4) {
-        // s = start_server(argv[2]);
         int t = start_server(argv[3]);
-        video_thread = std::thread(send_recv, t);
+        send_recv(t);
       }
       else if (argc == 5) {
-        // s = connect_server(argv[2], argv[3]);
         int t = connect_server(argv[2], argv[4]);
-        video_thread = std::thread(send_recv, t);
+        send_recv(t);
       }
       else {
         die("wrong usage: ./phone video [port] [port] or ./phone video [ip] [port] [port]");
