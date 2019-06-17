@@ -40,14 +40,14 @@ int main(int argc, char **argv) {
     }
     else if (strcmp(argv[1], "video") == 0) {
       if (argc == 4) {
-        s = start_server(argv[2]);
+        // s = start_server(argv[2]);
         int t = start_server(argv[3]);
-        video_thread = std::thread(video_server, t);
+        video_thread = std::thread(send_recv, t);
       }
       else if (argc == 5) {
-        s = connect_server(argv[2], argv[3]);
+        // s = connect_server(argv[2], argv[3]);
         int t = connect_server(argv[2], argv[4]);
-        video_thread = std::thread(video_client, t);
+        video_thread = std::thread(send_recv, t);
       }
       else {
         die("wrong usage: ./phone video [port] [port] or ./phone video [ip] [port] [port]");
@@ -61,23 +61,25 @@ int main(int argc, char **argv) {
     die("wrong usage: ./phone (sound|video)");
   }
 
-  short *buf = (short*)malloc(sizeof(short) * PACKET_SIZE);
-  while (1) {
+  if(strcmp(argv[1], "video")) {
+    short *buf = (short*)malloc(sizeof(short) * PACKET_SIZE);
+    while (1) {
     
-    int n = fread(buf, sizeof(short), PACKET_SIZE, stdin);
-    zero_fill(buf);
-    int m = send(s, buf, PACKET_SIZE, 0);
-    if (n!= m) die("failed to send sound data");
+      int n = fread(buf, sizeof(short), PACKET_SIZE, stdin);
+      zero_fill(buf);
+      int m = send(s, buf, PACKET_SIZE, 0);
+      if (n!= m) die("failed to send sound data");
 #ifdef DEBUG
-    fprintf(stderr, "finished sending sound data");
+      fprintf(stderr, "finished sending sound data");
 #endif
 
-    n = recv(s, buf, sizeof(short) * PACKET_SIZE, 0);
-    fwrite(buf, sizeof(short), n, stdout);
+      n = recv(s, buf, sizeof(short) * PACKET_SIZE, 0);
+      fwrite(buf, sizeof(short), n, stdout);
 #ifdef DEBUG
-    fprintf(stderr, "finished getting sound data");
+      fprintf(stderr, "finished getting sound data");
 #endif
+    }
+    close(s);
   }
-  close(s);
   return 0;
 }

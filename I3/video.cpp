@@ -40,10 +40,3 @@ void send_recv(int s) {
 
 }
 
-void video_server(int socket) {
-  send_recv(socket);
-}
-
-void video_client(int socket) {
-  send_recv(socket);
-}

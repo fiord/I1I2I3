@@ -5,10 +5,6 @@
 #include <cstdlib>
 #include "die.hpp"
 
-static void send_recv(int);
-
-extern void video_server(int);
-
-extern void video_client(int);
+extern void send_recv(int);
 
 #endif // INCLUDE_GUARD_IMG_HPP
