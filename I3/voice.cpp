@@ -1,6 +1,6 @@
 #include "voice.hpp"
 
-#define PACKET_SIZE 1024
+#define PACKET_SIZE 10240
 #define cut_volume 30
 
 void zero_fill(short *buf) {

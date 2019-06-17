@@ -15,7 +15,7 @@
 #include "connect.hpp"
 #define TCP_STREAM SOCK_STREAM
 #define UDP_STREAM SOCK_DGRAM
-#define PACKET_SIZE 1024
+#define PACKET_SIZE 10240
 
 #undef DEBUG
 
