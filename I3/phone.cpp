@@ -6,6 +6,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <cassert>
+#include <cstring>
 #include <cstdio>
 #include <cstdlib>
 #include <limits.h>
@@ -26,7 +27,7 @@ int main(int argc, char **argv) {
   std::thread video_thread;
 
   if (argc >= 2) {
-    if (argv[1] == "sound")  {
+    if (strcmp(argv[1], "sound") == 0)  {
       if (argc == 3) {
         s = start_server(argv[2]);
       }
@@ -37,7 +38,7 @@ int main(int argc, char **argv) {
         die("wrong usage: ./phone sound [port] or ./phone sound [ip] [port]\n");
       }
     }
-    else if (argv[1] == "video") {
+    else if (strcmp(argv[1], "video")) {
       if (argc == 4) {
         s = start_server(argv[2]);
         video_thread = std::thread(video_server, argv[3]);
@@ -61,7 +62,7 @@ int main(int argc, char **argv) {
     int n = fread(buf, sizeof(char), PACKET_SIZE, stdin);
     zero_fill(buf);
     int m = send(s, buf, PACKET_SIZE, 0);
-    if (PACKET_SIZE != m) die("failed to send data\n");
+    if (PACKET_SIZE != m) die("failed to send sound data\n");
 #ifdef DEBUG
     fprintf(stderr, "send: mode=%d, size=%d\n", mode, m);
     fprintf(stderr, "finished sending sound data\n");

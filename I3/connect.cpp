@@ -21,6 +21,7 @@ int start_server(char *arg_port) {
   int s = accept(ss, (struct sockaddr*)&client_addr, &len);
 
   close(ss);
+  fprintf(stderr, "success to connect:%d\n", s);
 
   return s;
 }
