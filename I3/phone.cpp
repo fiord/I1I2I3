@@ -9,6 +9,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <limits.h>
+#include <thread>
 #include "die.hpp"
 #include "connect.hpp"
 #define TCP_STREAM SOCK_STREAM
@@ -18,6 +19,7 @@
 #undef DEBUG
 
 #include "voice.hpp"
+#include "video.hpp"
 
 #undef USE_VIDEO
 #ifdef USE_VIDEO

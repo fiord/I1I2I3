@@ -1,4 +1,5 @@
 #include "video.hpp"
+#include "connect.hpp"
 
 #define HEIGHT 480.0
 #define WIDTH 640.0
