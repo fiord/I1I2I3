@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
         s = connect_server(argv[2], argv[3]);
       }
       else {
-        die("wrong usage: ./phone sound [port] or ./phone sound [ip] [port]\n");
+        die("wrong usage: ./phone sound [port] or ./phone sound [ip] [port]");
       }
     }
     else if (strcmp(argv[1], "video") == 0) {
@@ -48,15 +48,15 @@ int main(int argc, char **argv) {
         video_thread = std::thread(video_client, argv[2], argv[4]);
       }
       else {
-        die("wrong usage: ./phone video [port] [port] or ./phone video [ip] [port] [port]\n");
+        die("wrong usage: ./phone video [port] [port] or ./phone video [ip] [port] [port]");
       }
     }
     else {
-      die("wrong usage: ./phone (sound|video)\n");
+      die("wrong usage: ./phone (sound|video)");
     }
   }
   else {
-    die("wrong usage: ./phone (sound|video)\n");
+    die("wrong usage: ./phone (sound|video)");
   }
 
   short *buf = (short*)malloc(sizeof(short) * PACKET_SIZE);
@@ -65,15 +65,15 @@ int main(int argc, char **argv) {
     int n = fread(buf, sizeof(short), PACKET_SIZE, stdin);
     zero_fill(buf);
     int m = send(s, buf, PACKET_SIZE, 0);
-    if (n!= m) die("failed to send sound data\n");
+    if (n!= m) die("failed to send sound data");
 #ifdef DEBUG
-    fprintf(stderr, "finished sending sound data\n");
+    fprintf(stderr, "finished sending sound data");
 #endif
 
     n = recv(s, buf, sizeof(short) * PACKET_SIZE, 0);
     fwrite(buf, sizeof(short), n, stdout);
 #ifdef DEBUG
-    fprintf(stderr, "finished getting sound data\n");
+    fprintf(stderr, "finished getting sound data");
 #endif
   }
   close(s);
