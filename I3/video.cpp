@@ -25,10 +25,12 @@ void send_recv(int s) {
 
     // 送信 
     int m = send(s, &send_img, sizeof(send_img), 0);
+    fprintf(stderr, "send: img_size=%d, send_size=%d\n", sizeof(send_img), m);
     if (m != sizeof(send_img))  die("failed to send img data\n");
 
     // 受信・表示
     m = recv(s, &img, sizeof(send_img), 0);
+    fprintf(stderr, "recv: recv_size=%d\n", m);
     cv::imshow("tvphone", img);
 
     if (cv::waitKey(1) == 'q')  break;

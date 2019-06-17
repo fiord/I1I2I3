@@ -6,6 +6,9 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <cstdio>
+#include <cstring>
+#include <errno.h>
 #include <unistd.h>
 #include "die.hpp"
 #define TCP_STREAM SOCK_STREAM

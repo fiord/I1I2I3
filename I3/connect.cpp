@@ -39,7 +39,11 @@ int connect_server(char *arg_ip, char *arg_port) {
   if (ret ==-1) die("ip address is not valid\n");
   addr.sin_port = htons(to_port);
   ret = connect(s, (struct sockaddr*)&addr, sizeof(addr));
-  if (ret == -1)  die("connect failed\n");
+  int num = errno;
+  if (ret == -1) {
+    fprintf(stderr, "errno: %s\n", strerror(num));
+    die("connect failed\n");
+  }
   fprintf(stderr, "connection success\n");
 
   return s;
