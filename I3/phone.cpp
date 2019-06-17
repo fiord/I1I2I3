@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
         die("wrong usage: ./phone sound [port] or ./phone sound [ip] [port]\n");
       }
     }
-    else if (strcmp(argv[1], "video") == 1) {
+    else if (strcmp(argv[1], "video") == 0) {
       if (argc == 4) {
         s = start_server(argv[2]);
         video_thread = std::thread(video_server, argv[3]);
@@ -67,14 +67,12 @@ int main(int argc, char **argv) {
     int m = send(s, buf, PACKET_SIZE, 0);
     if (n!= m) die("failed to send sound data\n");
 #ifdef DEBUG
-    fprintf(stderr, "send: mode=%d, size=%d\n", mode, m);
     fprintf(stderr, "finished sending sound data\n");
 #endif
 
     n = recv(s, buf, sizeof(short) * PACKET_SIZE, 0);
     fwrite(buf, sizeof(short), n, stdout);
 #ifdef DEBUG
-    fprintf(stderr, "recv: mode=%d, size=%d\n", mode, n);
     fprintf(stderr, "finished getting sound data\n");
 #endif
   }
