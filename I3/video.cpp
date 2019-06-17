@@ -32,8 +32,6 @@ void send_recv(int s) {
     m = recv(s, &send_img, sizeof(send_img), 0);
     fprintf(stderr, "recv: recv_size=%d\n", m);
     cv::imshow("tvphone", send_img);
-
-    if (cv::waitKey(1) == 'q')  break;
   }
 
   cv::destroyAllWindows();
