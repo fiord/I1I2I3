@@ -5,6 +5,6 @@
 #include <string.h>
 #include <cmath>
 
-extern void zero_fill(char *);
+extern void zero_fill(short *);
 
 #endif // INCLUDE_GUARD_VOICE_HPP
