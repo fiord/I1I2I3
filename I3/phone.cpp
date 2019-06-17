@@ -63,7 +63,7 @@ int main(int argc, char **argv) {
   while (1) {
     
     int n = fread(buf, sizeof(short), PACKET_SIZE, stdin);
-    // zero_fill(buf);
+    zero_fill(buf);
     int m = send(s, buf, PACKET_SIZE, 0);
     if (n!= m) die("failed to send sound data\n");
 #ifdef DEBUG
