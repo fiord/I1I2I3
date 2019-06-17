@@ -21,11 +21,6 @@
 #include "voice.hpp"
 #include "video.hpp"
 
-#undef USE_VIDEO
-#ifdef USE_VIDEO
-#include "img.hpp"
-#endif
-
 int main(int argc, char **argv) {
   int s;
   std::thread video_thread;
