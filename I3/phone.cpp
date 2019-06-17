@@ -51,6 +51,9 @@ int main(int argc, char **argv) {
         die("wrong usage: ./phone video [port] [port] or ./phone video [ip] [port] [port]\n");
       }
     }
+    else {
+      die("wrong usage: ./phone (sound|video)\n");
+    }
   }
   else {
     die("wrong usage: ./phone (sound|video)\n");
