@@ -65,24 +65,7 @@ int main(int argc, char **argv) {
 
 
     if(strcmp(argv[1], "video")) {
-      short *buf = (short*)malloc(sizeof(short) * PACKET_SIZE);
-
-      while (1) {
-        int n = fread(buf, sizeof(short), PACKET_SIZE, stdin);
-        zero_fill(buf);
-        int m = send(s, buf, PACKET_SIZE*sizeof(short), 0);
-        if (n*sizeof(short) != m) die("failed to send sound data");
-#ifdef DEBUG
-        fprintf(stderr, "finished sending sound data");
-#endif
-
-        n = recv(s, buf, sizeof(short) * PACKET_SIZE, 0);
-        fwrite(buf, 1, n, stdout);
-#ifdef DEBUG
-        fprintf(stderr, "finished getting sound data");
-#endif
-      }
-      close(s);
+      send_recv_voice(s);
     }
   }
   catch (char *str) {
