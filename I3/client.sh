@@ -2,7 +2,7 @@
 if [ $# -ge 1 ]; then
   if [ $1 = "sound" ]; then
     if [ $# -eq 2 ]; then
-      rec -t raw -b 16 -c 1 -e s -r 44100 - | ./phone $1 $2 12345 | play -t raw -b 16 -c 1 -e s -r 44100 -;
+      ./phone $1 $2 12345;
     else
       echo "usage: ./client.sh sound {ip_addr}"
     fi
@@ -10,7 +10,7 @@ if [ $# -ge 1 ]; then
 
   if [ $1 = "video" ]; then
     if [ $# -eq 2 ]; then
-      gnome-terminal --command "rec -t raw -b 16 -c 1 -e s -r 44100 - | ./phone sound $2 12345 | play -t raw -b 16 -c 1 -e s -r 44100 -";
+      gnome-terminal --command "./phone sound $2 12345";
       ./phone video $2 30000;
     else
       echo "usage: ./client.sh video {ip_addr}"
