@@ -65,14 +65,14 @@ int main(int argc, char **argv) {
     
       int n = fread(buf, sizeof(short), PACKET_SIZE, stdin);
       zero_fill(buf);
-      int m = send(s, buf, PACKET_SIZE, 0);
-      if (n!= m) die("failed to send sound data");
+      int m = send(s, buf, PACKET_SIZE*sizeof(short), 0);
+      if (n*sizeof(short) != m) die("failed to send sound data");
 #ifdef DEBUG
       fprintf(stderr, "finished sending sound data");
 #endif
 
       n = recv(s, buf, sizeof(short) * PACKET_SIZE, 0);
-      fwrite(buf, sizeof(short), n, stdout);
+      fwrite(buf, 1, n, stdout);
 #ifdef DEBUG
       fprintf(stderr, "finished getting sound data");
 #endif
