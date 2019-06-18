@@ -10,7 +10,7 @@
 #include <cstring>
 #include <errno.h>
 #include <unistd.h>
-#include "die.hpp"
+#include "log.hpp"
 #define TCP_STREAM SOCK_STREAM
 #define UDP_STREAM SOCK_DGRAM
 #define SOUND_PACKET 1024

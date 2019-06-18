@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 14)
 find_package(OpenCV REQUIRED)
 add_executable(phone
   phone.cpp
-  die.cpp
+  log.cpp
   connect.cpp
   video.cpp
   voice.cpp

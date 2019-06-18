@@ -3,7 +3,7 @@
 #include <opencv2/opencv.hpp>
 #include <cstdio>
 #include <cstdlib>
-#include "die.hpp"
+#include "log.hpp"
 
 extern void send_recv(int);
 
