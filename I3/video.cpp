@@ -25,6 +25,7 @@ void send_video(int s) {
     }
 
     cv::imencode(".jpg", img, ibuff, param);
+    fprintf(stderr, "[info] size of image = %d\n", ibuff.size());
     if (ibuff.size() < PACKET_VIDEO_SIZE) {
       for (int i = 0; i < PACKET_VIDEO_SIZE; i++) {
         if (i < ibuff.size()) buff[i] = ibuff[i];
@@ -32,6 +33,7 @@ void send_video(int s) {
       }
       int m = send(s, buff, PACKET_VIDEO_SIZE, 0);
       if (m != PACKET_VIDEO_SIZE)  die("failed to send img data");
+      fprintf(stderr, "[info] send success\n");
     }
     ibuff.clear();
   }
