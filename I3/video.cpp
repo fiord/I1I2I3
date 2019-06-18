@@ -60,11 +60,16 @@ void recv_video(int s) {
 }
 
 void send_recv_video(int s) {
-  std::thread sender(send_video, s);
-  std::thread recver(recv_video, s);
+  try {
+    std::thread sender(send_video, s);
+    std::thread recver(recv_video, s);
 
-  sender.join();
-  recver.join();
+    sender.join();
+    recver.join();
+  }
+  catch (cv::Exception &e) {
+    std::cerr << e.what() << std::endl;
+  }
   close(s);
 }
 

@@ -5,6 +5,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
 #include <vector>
 #include <thread>
 #include "log.hpp"
