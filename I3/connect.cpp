@@ -21,7 +21,7 @@ int start_server(char *arg_port) {
   int s = accept(ss, (struct sockaddr*)&client_addr, &len);
 
   close(ss);
-  fprintf(stderr, "success to connect:%d\n", s);
+  fprintf(stderr, "[info] success to connect:%d\n", s);
 
   return s;
 }
@@ -42,7 +42,7 @@ int connect_server(char *arg_ip, char *arg_port) {
   if (ret == -1) {
     die("connect failed");
   }
-  fprintf(stderr, "connection success\n");
+  fprintf(stderr, "[info] connection success\n");
 
   return s;
 }
