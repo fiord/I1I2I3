@@ -10,8 +10,8 @@ if [ $# -ge 1 ]; then
 
   if [ $1 = "video" ]; then
     if [ $# -eq 2 ]; then
-      gnome-terminal --command "./phone video $2 30000";
-      rec -t raw -b 16 -c 1 -e s -r 44100 - | ./phone sound $2 12345 | play -t raw -b 16 -c 1 -e s -r 44100 -;
+      gnome-terminal --command "rec -t raw -b 16 -c 1 -e s -r 44100 - | ./phone sound $2 12345 | play -t raw -b 16 -c 1 -e s -r 44100 -";
+      ./phone video $2 30000;
     else
       echo "usage: ./client.sh video {ip_addr}"
     fi
