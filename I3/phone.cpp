@@ -39,11 +39,14 @@ int main(int argc, char **argv) {
       }
     }
     else if (strcmp(argv[1], "video") == 0) {
+      fprintf(stderr, "[info] This is video mode.\n");
       if (argc == 3) {
+        fprintf(stderr, "start server at port %s...\n", argv[2]);
         int t = start_server(argv[2]);
         send_recv(t);
       }
       else if (argc == 4) {
+        fprintf(stderr, "connect to %s:%s...\n", argv[2], argv[3]);
         int t = connect_server(argv[2], argv[3]);
         send_recv(t);
       }
