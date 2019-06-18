@@ -44,12 +44,12 @@ int main(int argc, char **argv) {
         if (argc == 3) {
           fprintf(stderr, "start server at port %s...\n", argv[2]);
           int t = start_server(argv[2]);
-          send_recv(t);
+          send_recv_video(t);
         }
         else if (argc == 4) {
           fprintf(stderr, "connect to %s:%s...\n", argv[2], argv[3]);
           int t = connect_server(argv[2], argv[3]);
-          send_recv(t);
+          send_recv_video(t);
         }
         else {
           die("wrong usage: ./phone video [port] [port] or ./phone video [ip] [port] [port]");
@@ -64,20 +64,20 @@ int main(int argc, char **argv) {
     }
 
 
-  if(strcmp(argv[1], "video")) {
-    short *buf = (short*)malloc(sizeof(short) * PACKET_SIZE);
-    while (1) {
-    
-      int n = fread(buf, sizeof(short), PACKET_SIZE, stdin);
-      zero_fill(buf);
-      int m = send(s, buf, PACKET_SIZE*sizeof(short), 0);
-      if (n*sizeof(short) != m) die("failed to send sound data");
+    if(strcmp(argv[1], "video")) {
+      short *buf = (short*)malloc(sizeof(short) * PACKET_SIZE);
+
+      while (1) {
+        int n = fread(buf, sizeof(short), PACKET_SIZE, stdin);
+        zero_fill(buf);
+        int m = send(s, buf, PACKET_SIZE*sizeof(short), 0);
+        if (n*sizeof(short) != m) die("failed to send sound data");
 #ifdef DEBUG
         fprintf(stderr, "finished sending sound data");
 #endif
 
-      n = recv(s, buf, sizeof(short) * PACKET_SIZE, 0);
-      fwrite(buf, 1, n, stdout);
+        n = recv(s, buf, sizeof(short) * PACKET_SIZE, 0);
+        fwrite(buf, 1, n, stdout);
 #ifdef DEBUG
         fprintf(stderr, "finished getting sound data");
 #endif

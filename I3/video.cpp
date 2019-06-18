@@ -1,37 +1,54 @@
 #include "video.hpp"
 #include "connect.hpp"
 
-#define HEIGHT 480.0
-#define WIDTH 640.0
+#define PACKET_SIZE 65500
+#define HEIGHT 480
+#define WIDTH 640
 
-void send_recv(int s) {
+void send_recv_video(int s) {
   cv::VideoCapture cap(0);
   if (!cap.isOpened()) {
     die("failed to open camera");
   }
+  
+  cap.set(CV_CAP_PROP_FRAME_WIDTH, WIDTH);
+  cap.set(CV_CAP_PROP_FRAME_HEIGHT, HEIGHT);
 
   cv::Mat img;
+  vector<unsigned char> ibuff;
+  vector<int> param = { CV_IMWRITE_JPEG_QUALITY, 85 };
+  char buff[PACKET_SIZE];
 
   while (true) {
     if (!cap.read(img)) {
       die("failed to read image data");
     }
 
-    // 640x480にリサイズ
-    int width = img.rows;
-    int height = img.cols;
-    cv::Mat send_img;
-    cv::resize(img, send_img, cv::Size(), WIDTH / width, HEIGHT / height);
+    // jpegに変換
+    imencode(".jpg", img, ibuff, param); 
 
-    // 送信 
-    int m = send(s, &send_img, sizeof(send_img), 0);
-    fprintf(stderr, "[info] send: img_size=%d, send_size=%d\n", sizeof(send_img), m);
-    if (m != sizeof(send_img))  die("failed to send img data");
+    // 送信
+    fprintf(stderr, "[info] image size is %d\n", ibuff.size());
+    if (ibuff.size() < PACKET_SIZE) {
+      for (int i = 0; i < PACKET_SIZE; i++) {
+        if (i < ibuff.size()) buff[i] = ibuff[i];
+        else  buff[i] = 0;
+      }
+      int m = send(s, buff, PACKET_SIZE, 0);
+      if (m != PACKET_SIZE)  die("failed to send img data");
+    }
+    ibuff.clear();
 
     // 受信・表示
-    m = recv(s, &send_img, sizeof(send_img), 0);
+    m = recv(s, buff, PACKET_SIZE, 0);
     fprintf(stderr, "[info] recv: recv_size=%d\n", m);
-    cv::imshow("tvphone", send_img);
+    for (int i = 0; i < sizeof(buff); i++) {
+      ibuff.push_back((unsigned char)buff[i]);
+    }
+    if (m == -1)  break;
+    img = imdecode(Mat(ibuff), CV_LOAD_IMAGE_COLOR);
+    cv::imshow("tvphone", img);
+    ibuff.clear();
   }
 
   cv::destroyAllWindows();
