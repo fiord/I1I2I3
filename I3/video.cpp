@@ -15,8 +15,8 @@ void send_recv_video(int s) {
   cap.set(CV_CAP_PROP_FRAME_HEIGHT, HEIGHT);
 
   cv::Mat img;
-  vector<unsigned char> ibuff;
-  vector<int> param = { CV_IMWRITE_JPEG_QUALITY, 85 };
+  std::vector<unsigned char> ibuff;
+  std::vector<int> param = { CV_IMWRITE_JPEG_QUALITY, 85 };
   char buff[PACKET_SIZE];
 
   while (true) {
@@ -25,7 +25,7 @@ void send_recv_video(int s) {
     }
 
     // jpegに変換
-    imencode(".jpg", img, ibuff, param); 
+    cv::imencode(".jpg", img, ibuff, param); 
 
     // 送信
     fprintf(stderr, "[info] image size is %d\n", ibuff.size());
@@ -40,13 +40,13 @@ void send_recv_video(int s) {
     ibuff.clear();
 
     // 受信・表示
-    m = recv(s, buff, PACKET_SIZE, 0);
+    int m = recv(s, buff, PACKET_SIZE, 0);
     fprintf(stderr, "[info] recv: recv_size=%d\n", m);
     for (int i = 0; i < sizeof(buff); i++) {
       ibuff.push_back((unsigned char)buff[i]);
     }
     if (m == -1)  break;
-    img = imdecode(Mat(ibuff), CV_LOAD_IMAGE_COLOR);
+    img = cv::imdecode(cv::Mat(ibuff), CV_LOAD_IMAGE_COLOR);
     cv::imshow("tvphone", img);
     ibuff.clear();
   }
