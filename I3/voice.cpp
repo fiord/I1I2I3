@@ -28,10 +28,14 @@ void hold(int s) {
 }
 
 void send_recv_voice(int s) {
+  FILE *sound_in = popen("rec -t raw -b 16 -c 1 -e s -r 44100 -", "r");
+  FILE *sound_out = popen("play -t raw -b 16 -c 1 -e s -r 44100 -", "w");
+  if (sound_in == NULL) die("failed to invoke rec\n");
+  if (sound_out == NULL) die("failed to invoke play\n");
   short *buf = (short*)malloc(sizeof(short) * PACKET_SIZE);
   while (1) {
     
-    int n = fread(buf, sizeof(short), PACKET_SIZE, stdin);
+    int n = fread(buf, sizeof(short), PACKET_SIZE, sound_in);
     zero_fill(buf);
     int m = send(s, buf, PACKET_SIZE*sizeof(short), 0);
     if (n*sizeof(short) != m) die("failed to send sound data");
@@ -40,11 +44,13 @@ void send_recv_voice(int s) {
 #endif
 
     n = recv(s, buf, sizeof(short) * PACKET_SIZE, 0);
-    fwrite(buf, 1, n, stdout);
+    fwrite(buf, 1, n, sound_out);
 #ifdef DEBUG
     fprintf(stderr, "finished getting sound data");
 #endif
   }
+  pclose(sound_in);
+  pclose(sound_out);
   close(s);
 }
       
