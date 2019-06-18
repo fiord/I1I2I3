@@ -6,7 +6,7 @@
 #include <cmath>
 #include <sys/types.h>
 #include <sys/socket.h>
-#include "die.hpp"
+#include "log.hpp"
 
 extern void zero_fill(short *);
 
