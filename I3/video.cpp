@@ -31,8 +31,11 @@ void send_video(int s) {
         if (i < ibuff.size()) buff[i] = ibuff[i];
         else  buff[i] = 0;
       }
-      int m = send(s, buff, PACKET_VIDEO_SIZE, 0);
-      if (m != PACKET_VIDEO_SIZE)  die("failed to send img data");
+      // 100分割してデータ送信
+      for (int i = 0; i < 100; i++) {
+        int m = send(s, buff + i * (PACKET_VIDEO_SIZE / 100), PACKET_VIDEO_SIZE / 100, 0);
+        if (m != PACKET_VIDEO_SIZE / 100)  die("failed to send img data");
+      }
       fprintf(stderr, "[info] send success\n");
     }
     ibuff.clear();
@@ -48,12 +51,14 @@ void recv_video(int s) {
 
   while(1) {
     // 受信・表示
-    int m = recv(s, buff, PACKET_VIDEO_SIZE, 0);
-    fprintf(stderr, "[info] recv: recv_size=%d\n", m);
-    for (int i = 0; i < sizeof(buff); i++) {
-      ibuff.push_back((unsigned char)buff[i]);
+    for (int i = 0; i < 100; i++) {
+      int m = recv(s, buff, PACKET_VIDEO_SIZE / 100, 0);
+      fprintf(stderr, "[info] recv: recv_size=%d\n", m);
+      for (int i = 0; i < PACKET_VIDEO_SIZE / 100; i++) {
+        ibuff.push_back((unsigned char)buff[i]);
+      }
+      if (m == -1)  return;
     }
-    if (m == -1)  break;
     img = cv::imdecode(cv::Mat(ibuff), CV_LOAD_IMAGE_COLOR);
     cv::imshow("tvphone", img);
     ibuff.clear();
