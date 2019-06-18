@@ -27,11 +27,9 @@ void hold(int s) {
   }
 }
 
-void send_recv_voice(int s) {
+void send_voice(int s) {
   FILE *sound_in = popen("rec -t raw -b 16 -c 1 -e s -r 44100 -", "r");
-  FILE *sound_out = popen("play -t raw -b 16 -c 1 -e s -r 44100 -", "w");
   if (sound_in == NULL) die("failed to invoke rec\n");
-  if (sound_out == NULL) die("failed to invoke play\n");
   short *buf = (short*)malloc(sizeof(short) * PACKET_SIZE);
   while (1) {
     
@@ -42,15 +40,34 @@ void send_recv_voice(int s) {
 #ifdef DEBUG
     fprintf(stderr, "finished sending sound data");
 #endif
+  }
+  pclose(sound_in);
+  free(buf);
+}
 
-    n = recv(s, buf, sizeof(short) * PACKET_SIZE, 0);
+void recv_voice(int s) {
+  FILE *sound_out = popen("play -t raw -b 16 -c 1 -e s -r 44100 -", "w");
+  if (sound_out == NULL) die("failed to invoke play\n");
+  short *buf = (short*)malloc(sizeof(short) * PACKET_SIZE);
+  while (1) {
+    
+    int n = recv(s, buf, sizeof(short) * PACKET_SIZE, 0);
     fwrite(buf, 1, n, sound_out);
 #ifdef DEBUG
     fprintf(stderr, "finished getting sound data");
 #endif
   }
-  pclose(sound_in);
   pclose(sound_out);
+  free(buf);
+}
+
+void send_recv_voice(int s) {
+  std::thread sender(send_voice, s);
+  std::thread recver(recv_voice, s);
+
+  sender.join();
+  recver.join();
+  
   close(s);
 }
       

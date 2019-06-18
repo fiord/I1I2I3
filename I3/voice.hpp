@@ -7,11 +7,16 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <thread>
 #include "log.hpp"
 
 extern void zero_fill(short *);
 
 extern void hold(int);
+
+extern void send_voice(int);
+
+extern void recv_voice(int);
 
 extern void send_recv_voice(int);
 
