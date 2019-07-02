@@ -46,3 +46,24 @@ int connect_server(char *arg_ip, char *arg_port) {
 
   return s;
 }
+
+int connect_server_udp(char *arg_ip, char *arg_port) {
+  char *to_addr = arg_ip;
+  char **endptr = NULL;
+  int to_port = strtol(arg_port, endptr, 0);
+  if (endptr != NULL) die("port is not valid");
+  int s = socket(PF_INET, UDP_STREAM, 0);
+  if (s == 1) die("socket error");
+  struct sockaddr_in addr;
+  addr.sin_family = AF_INET;
+  int ret = inet_aton(to_addr, &addr.sin_addr);
+  if (ret ==-1) die("ip address is not valid");
+  addr.sin_port = htons(to_port);
+  ret = connect(s, (struct sockaddr*)&addr, sizeof(addr));
+  if (ret == -1) {
+    die("connect failed");
+  }
+  fprintf(stderr, "[info] connection success\n");
+
+  return s;
+}

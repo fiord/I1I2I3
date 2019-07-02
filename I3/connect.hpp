@@ -19,4 +19,6 @@ extern int start_server(char *arg_port);
 
 extern int connect_server(char *arg_ip, char *arg_port);
 
+extern int connect_server_udp(char *arg_ip, char *arg_port);
+
 #endif // INCLUDE_GUARD_CONNECT_HPP
