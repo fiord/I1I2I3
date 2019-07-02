@@ -2,7 +2,7 @@
 if [ $# -ge 1 ]; then
   if [ $1 = "sound" ]; then
     if [ $# -eq 2 ]; then
-      ./phone $1 $2 12345;
+      ./phone $1 $2 12345 2> std-err.txt;
     else
       echo "usage: ./client.sh sound {ip_addr}"
     fi
@@ -11,7 +11,7 @@ if [ $# -ge 1 ]; then
   if [ $1 = "video" ]; then
     if [ $# -eq 2 ]; then
       gnome-terminal --command "./phone sound $2 12345";
-      ./phone video $2 30000;
+      ./phone video $2 30000 2> std-err.txt;
     else
       echo "usage: ./client.sh video {ip_addr}"
     fi

@@ -12,3 +12,5 @@ add_executable(phone
 find_package(Threads REQUIRED)
 target_link_libraries(phone Threads::Threads)
 target_link_libraries(phone ${OpenCV_LIBS})
+target_link_libraries(phone ncurses)
+
