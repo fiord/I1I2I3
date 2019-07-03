@@ -1,102 +1,36 @@
-[info] success to connect:rec WARN alsa: can't encode 0-bit Unknown or not applicable
-plplay WARN alsa: can't encode 0-bit Unknown or not applicablplplay WARN alsa: under-ruplay WARN alsa: under-run
-plplay WARN alsa: under-ruplplay WARN alsaununder-r
+[info] success to connect:replay WARN alsa: can't encode 0-bit Unknown or not applicabplay WARN alsa: can't encode 0-bit Unknown or not applicable
 plplay WARN alsa: under-run
 play WARN alsa: under-run
+play WARN alsa: under-ruplplay WARN alsa: under-ruplplay WARN alsa: under-run
+play WARN alsa: under-ruplplay WARN alsa: under-rup
 play WARN alsa: under-run
 play WARN alsa: under-run
 play WARN alsa: under-run
 play WARN alsa: under-run
 play WARN alsa: under-run
 play WARN alsa: under-run
+play WARN alsa: under-ruplplay WARN alsa: under-ruplplay WARN alsaununder-r
 play WARN alsa: under-run
 play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-ruplay WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-plplay WARN alsaununder-r
-play WARN alsa: ununder-r
-play WARN alsa: under-run
-play WARN alsa: under-run
-play WARN alsa: under-run
-plplay WARN alsaununder-r
 plplay WARN alsa: under-ruplay WARN alsa: under-run
-plplay WARN alsa: under-ruplay WARN alsa: ununder-r
+plplay WARN alsa: under-ruplay WARN alsa: under-run
+plplay WARN alsa: under-ruplplay WARN alsa: under-ruplplay WARN alsa: under-ruplay WARN alsa: under-run
 play WARN alsa: under-run
 play WARN alsa: under-run
 play WARN alsa: under-run
-terminate called after throwing an instance of 'char*'
-Aborted (core dumped)
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+rec WARN alsa: can't encode 0-bit Unknown or not applicable
+play WARN alsa: can't encode 0-bit Unknown or not applicable
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
