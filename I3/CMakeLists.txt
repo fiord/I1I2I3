@@ -9,13 +9,7 @@ add_executable(phone
   voice.cpp
 )
 find_package(OpenCV REQUIRED)
-target_link_libraries(phone ${OpenCV_LIBS})
 find_package(Threads REQUIRED)
 target_link_libraries(phone Threads::Threads)
-<<<<<<< HEAD
 target_link_libraries(phone ncurses)
-=======
 target_link_libraries(phone ${OpenCV_LIBS})
-target_link_libraries(phone ncurses)
-
->>>>>>> 550a3c2e2ef0ccbba15fb0ba8a61fbb2b0f3e68c
