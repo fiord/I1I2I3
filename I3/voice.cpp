@@ -9,42 +9,58 @@ char your_command = 0;
 
 std::mutex mutex;
 
+void write_cursor(WINDOW *for_read, int y_now) {
+  mutex.lock();
+  wclear(for_read);
+  wmove(for_read, y_now, 0);
+  wechochar(for_read, '>');
+  wrefresh(for_read);
+  mutex.unlock();
+}
+
 void get_command(WINDOW *for_read) {
   sleep(0.5);
 
   char buf = 0;
+  int y_now = 0;
+  char my_com_buf = 0, your_com_buf = 0;
+
   while(1) {
     if (my_command == 'q' || your_command == 'q') return;
-    buf = wgetch(for_read);
-    while (wgetch(for_read) != '\n') {}
-    if (buf == 'h' || buf == 'f') {
-      if (your_command != 'h') {
-        my_command = buf;
+    while ((buf = wgetch(for_read)) != '\n') {
+      if (buf == ' ') {
+        y_now = 1 - y_now;
+        write_cursor(for_read, y_now);
       }
     }
-    else if (buf == 'q') {
-      my_command = 'q';
+    my_com_buf = my_command, your_com_buf = your_command;
+    if (y_now == 0) {
+      if (my_com_buf == 'h') my_command = 'f';
+      else if (your_com_buf == 'h') my_command = 'q';
+      else my_command = 'h';
     }
-    mutex.lock();
-    wclear(for_read);
-    wmove(for_read, 0, 0);
-    wrefresh(for_read);
-    mutex.unlock();
+    else if (y_now == 1) {
+      if (my_com_buf == 'h') my_command = 'q';
+      else if (your_com_buf == 'h') ;
+      else my_command = 'q';
+    }
+    y_now = 0;
+    write_cursor(for_read, y_now);
   }
 }
 
 void display() {
   std::chrono::system_clock::time_point start, now;
-  int time = -1, pre_time = -1;
+  int time = 0, pre_time = 0;
   start = std::chrono::system_clock::now();
 
   initscr();
-  nocbreak();
-  echo();
-  curs_set(1);
+  cbreak();
+  noecho();
+  curs_set(0);
 
   WINDOW *for_write = newwin(5, 100, 0, 0);
-  WINDOW *for_read = newwin(5, 100, 5, 0);
+  WINDOW *for_read = newwin(2, 1, 3, 0);
   sleep(0.5);
 
   std::thread get_commander(get_command, for_read);
@@ -59,24 +75,23 @@ void display() {
       mutex.lock();
       wclear(for_write);
       wmove(for_write, 0, 0);
-      if (your_com_buf == 'h') waddstr(for_write, "horyu-chu\n");
-      else if (my_com_buf == 'h') waddstr(for_write, "put f and press enter to finish hold\n");
-      else waddstr(for_write, "put command and press enter\n hold : h\n finish talking : q\n");
+      if (my_com_buf == 'h') waddstr(for_write, "horyu-chu\n\n\n  tsu-wanimdoru\n  tsu-wayameru");
+      else if (your_com_buf == 'h') waddstr(for_write, "horyu-sareteru\n\n\n  tsu-wayameru\n  nanimosinai");
+      else waddstr(for_write, "tsu-wachu\n\n\n  horyu-suru\n  tu-wayameru");
+      wmove(for_write, 1, 0);
+      wprintw(for_write, "time : %02d:%02d", time/60, time%60);
       wrefresh(for_write);
       mutex.unlock();
+      write_cursor(for_read, 0);
     }
     now = std::chrono::system_clock::now();
     pre_time = time;
     time = (int)std::chrono::duration_cast<std::chrono::seconds>(now-start).count();
     if (pre_time != time) {
       mutex.lock();
-      getyx(for_write, y_now, x_now);
-      wmove(for_write, y_now, 0);
+      wmove(for_write, 1, 0);
       wprintw(for_write, "time : %02d:%02d", time/60, time%60);
       wrefresh(for_write);
-      getyx(for_read, y_now, x_now);
-      wmove(for_read, y_now, x_now);
-      wrefresh(for_read);
       mutex.unlock();
     }
     pre_my_com = my_com_buf;
@@ -186,7 +201,7 @@ void recv_voice(int s) {
     else if (your_com_buf == 'h') {
       pclose(sound_out);
       sound_out = popen("play --buffer 256 -q -t raw -b 16 -c 1 -e s -r 44100 -", "w");
-      FILE *music = fopen("for_horyu.raw", "r");
+      FILE *music = fopen("sound/for_horyu.raw", "r");
       if (music == NULL) die("failed to open music\n");
       while (1) {
         my_com_buf = my_command, your_com_buf = your_command;
@@ -223,6 +238,9 @@ void recv_voice(int s) {
     fprintf(stderr, "finished getting sound data");
 #endif
   }
+
+  system("play -q -t raw -b 16 -c 1 -e s -r 44100 sound/end.raw");
+
   pclose(sound_out);
   free(buf);
 }

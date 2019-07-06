@@ -1,2 +1,31 @@
-[info] This is video mode.
-start server at port 54321...
+[info] success to connect:rerec WARN alsa: can't encode 0-bit Unknown or not applicable
+play WARN alsa: can't encode 0-bit Unknown or not applicablplplay WARN alsaununder-r
+plplay WARN alsa: under-ruplay WARN alsa: under-run
+play WARN alsa: under-run
+plplay WARN alsa: under-ruplay WARN alsa: under-run
+plplay WARN alsa: under-ruplay WARN alsa: under-run
+plplay WARN alsa: under-ruplay WARN alsa: under-run
+plplay WARN alsa: under-ruplay WARN alsa: under-run
+rec WARN alsa: can't encode 0-bit Unknown or not applicable
+play WARN alsa: can't encode 0-bit Unknown or not applicable
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN aplay WARN alsa: can't encode 0-bit Unknown or not applicable
+play WARN alsa: under-run
+r-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: can't encode 0-bit Unknown or not applicable
+play WARN alsa: under-run
