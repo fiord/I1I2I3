@@ -12,7 +12,8 @@ if [ $# -ge 1 ]; then
     if [ $# -eq 2 ]; then
       gnome-terminal --command "./phone sound $2 12345";
       gnome-terminal --command "./Build/vrphone.x86_64";
-      ./phone video $2 54321 2> std-err.txt;
+      sleep 5;
+      ./phone video $2 54321 # 2> std-err.txt;
     else
       echo "usage: ./client.sh video {ip_addr}"
     fi

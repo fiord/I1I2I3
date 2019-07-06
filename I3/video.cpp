@@ -1,7 +1,7 @@
 #include "video.hpp"
 #include "connect.hpp"
 
-#define PACKET_VIDEO_SIZE 18
+#define PACKET_VIDEO_SIZE 25
 #define HEIGHT 480
 #define WIDTH 640
 #define VIDEO_DEBUG
@@ -87,6 +87,7 @@ void send_video(int s) {
 
   fprintf(stderr, "start malloc\n");
   char buf[PACKET_VIDEO_SIZE];
+  memset(buf, '\0', PACKET_VIDEO_SIZE);
   fprintf(stderr, "malloc ok\n");
 
   while (cap.read(img)) {
@@ -122,10 +123,9 @@ void send_video(int s) {
       for (int i = 0; i < 3; i++) face_pose[i] = face_kalmans[i].guess(face_pose[i]);
       fprintf(stderr, "face check:ok\n");
       fprintf(stderr, "sprintf\n");
-      sprintf(buf, "%.3f %.3f %.3f", face_pose[0], face_pose[1], face_pose[2]);
-      fprintf(stderr, "%s\n", buf);
+      sprintf(buf, "%.3f %.3f %.3f ", face_pose[0], face_pose[1], face_pose[2]);
       
-      fprintf(stderr, "start sending\n");
+      fprintf(stderr, "start sending:%s\n", buf);
       int m = send(s, buf, sizeof(buf), 0);
       if (m != sizeof(buf)) die("failed to send data");
       fprintf(stderr, "send ok\n");
@@ -137,14 +137,14 @@ void send_video(int s) {
 void recv_video(int s, int t) {
   fprintf(stderr, "recv start\n");
   char buf[PACKET_VIDEO_SIZE];
+  memset(buf, '\0', PACKET_VIDEO_SIZE);
   fprintf(stderr, "malloc OK\n");
   while (true) {
-    // fprintf(stderr, "start receiving...\n");
-    // int m = recv(s, buf, PACKET_VIDEO_SIZE, 0);
-    // fprintf(stderr, "end receiving\n");
-    // if (m == 0) break;
+    fprintf(stderr, "start receiving...\n");
+    int m = recv(s, buf, PACKET_VIDEO_SIZE, 0);
+    fprintf(stderr, "end receiving\n");
+    if (m == 0) break;
 
-    sprintf(buf, "checkcheckcheckok");
     fprintf(stderr, "start sending to unity...: %s\n", buf);
     int m2 = send(t, buf, sizeof(buf), 0);
     if (sizeof(buf) != m2)  die("failed to send data");
