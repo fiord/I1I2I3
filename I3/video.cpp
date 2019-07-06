@@ -85,9 +85,12 @@ void send_video(int s) {
   vector<pair<Kalman, Kalman>> kalmans(68, make_pair(Kalman(0.5, 2), Kalman(0.5, 2)));
   vector<Kalman> face_kalmans(3, Kalman(0.5, 1));
 
+  fprintf(stderr, "start malloc\n");
   char buf[PACKET_VIDEO_SIZE];
+  fprintf(stderr, "malloc ok\n");
 
   while (cap.read(img)) {
+    fprintf(stderr, "check face...\n");
     cvtColor(img, gray, COLOR_BGR2GRAY);
 
     faceDetector.detectMultiScale(gray, faces, 1.1, 3, 0, Size(20, 20));
@@ -117,24 +120,35 @@ void send_video(int s) {
       vector<double> face_pose = get_head_pose(landmarks[target]);
       swap(face_pose[1], face_pose[2]);
       for (int i = 0; i < 3; i++) face_pose[i] = face_kalmans[i].guess(face_pose[i]);
-      sprintf(buf, "%.3f %.3f %.3f ", face_pose[0], face_pose[1], face_pose[2]);
+      fprintf(stderr, "face check:ok\n");
+      fprintf(stderr, "sprintf\n");
+      sprintf(buf, "%.3f %.3f %.3f", face_pose[0], face_pose[1], face_pose[2]);
       fprintf(stderr, "%s\n", buf);
       
+      fprintf(stderr, "start sending\n");
       int m = send(s, buf, sizeof(buf), 0);
       if (m != sizeof(buf)) die("failed to send data");
+      fprintf(stderr, "send ok\n");
     }
   }
 }
 
 // sから受け取ってtに流す
 void recv_video(int s, int t) {
+  fprintf(stderr, "recv start\n");
   char buf[PACKET_VIDEO_SIZE];
+  fprintf(stderr, "malloc OK\n");
   while (true) {
-    int m = recv(s, buf, PACKET_VIDEO_SIZE, 0);
-    if (m == 0) break;
+    // fprintf(stderr, "start receiving...\n");
+    // int m = recv(s, buf, PACKET_VIDEO_SIZE, 0);
+    // fprintf(stderr, "end receiving\n");
+    // if (m == 0) break;
 
+    sprintf(buf, "checkcheckcheckok");
+    fprintf(stderr, "start sending to unity...: %s\n", buf);
     int m2 = send(t, buf, sizeof(buf), 0);
-    if (m != m2)  die("failed to send data");
+    if (sizeof(buf) != m2)  die("failed to send data");
+    fprintf(stderr, "end send to unity\n");
   }
 }
 
@@ -148,7 +162,7 @@ void send_recv_video(int s) {
     recver.join();
     close(unity);
   }
-  catch(cv::Exception &e) {
+  catch(cv::Exception e) {
     cerr << e.what() << endl;
   }
   close(s);
