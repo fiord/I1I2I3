@@ -1,7 +1,7 @@
 #include "video.hpp"
 #include "connect.hpp"
 
-#define PACKET_VIDEO_SIZE 25
+#define PACKET_VIDEO_SIZE 64
 #define HEIGHT 480
 #define WIDTH 640
 #define VIDEO_DEBUG
@@ -66,7 +66,7 @@ vector<double> get_head_pose(vector<Point2f> shape) {
   return euler_angles;
 }
 
-void send_video(int s) {
+void send_video(int s, int id) {
   VideoCapture cap(0);
   if (!cap.isOpened()) {
     die("failed to open camera");
@@ -110,6 +110,11 @@ void send_video(int s) {
           target = i;
         }
       }
+      // kalman filterに入れる前に瞬き・口の大きさは取る(消えるため)
+      float right_eye = (cv::norm(landmarks[target][38] - landmarks[target][42]) + cv::norm(landmarks[target][39] - landmarks[target][41])) / (2.0 * cv::norm(landmarks[target][37] - landmarks[target][40]));
+      float left_eye = (cv::norm(landmarks[target][44] - landmarks[target][48]) + cv::norm(landmarks[target][45] - landmarks[target][47])) / (2.0 * cv::norm(landmarks[target][43] - landmarks[target][46]));
+      float mouth = (cv::norm(landmarks[target][62] - landmarks[target][68]) + cv::norm(landmarks[target][63] - landmarks[target][67]) + cv::norm(landmarks[target][64] - landmarks[target][66])) / (3.0 * cv::norm(landmarks[target][61] - landmarks[target][65]));
+
       for (int i = 0; i < landmarks[target].size(); i++) {
         double x = kalmans[i].first.guess(landmarks[target][i].x);
         double y = kalmans[i].second.guess(landmarks[target][i].y);
@@ -123,7 +128,7 @@ void send_video(int s) {
       for (int i = 0; i < 3; i++) face_pose[i] = face_kalmans[i].guess(face_pose[i]);
       fprintf(stderr, "face check:ok\n");
       fprintf(stderr, "sprintf\n");
-      sprintf(buf, "%.3f %.3f %.3f ", face_pose[0], face_pose[1], face_pose[2]);
+      sprintf(buf, "%d %.3f %.3f %.3f %.3f %.3f %.3f", id, face_pose[0], face_pose[1], face_pose[2], left_eye, right_eye, mouth);
       
       fprintf(stderr, "start sending:%s\n", buf);
       int m = send(s, buf, sizeof(buf), 0);
@@ -152,9 +157,9 @@ void recv_video(int s, int t) {
   }
 }
 
-void send_recv_video(int s) {
+void send_recv_video(int s, int id) {
   try {
-    thread sender(send_video, s);
+    thread sender(send_video, s, id);
     int unity = connect_server_udp("127.0.0.1", "55555");
     thread recver(recv_video, s, unity);
 

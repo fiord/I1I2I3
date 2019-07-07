@@ -9,13 +9,13 @@ if [ $# -ge 1 ]; then
   fi
 
   if [ $1 = "video" ]; then
-    if [ $# -eq 2 ]; then
-      gnome-terminal --command "./phone sound $2 12345";
+    if [ $# -eq 3 ]; then
+      gnome-terminal --command "./phone sound $3 12345";
       gnome-terminal --command "./Build/vrphone.x86_64";
       sleep 5;
-      ./phone video $2 54321 # 2> std-err.txt;
+      ./phone video $2 $3 54321 # 2> std-err.txt;
     else
-      echo "usage: ./client.sh video {ip_addr}"
+      echo "usage: ./client.sh video {characterID} {ip_addr}"
     fi
   fi
 else

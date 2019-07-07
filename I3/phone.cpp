@@ -41,18 +41,19 @@ int main(int argc, char **argv) {
       }
       else if (strcmp(argv[1], "video") == 0) {
         fprintf(stderr, "[info] This is video mode.\n");
-        if (argc == 3) {
-          fprintf(stderr, "start server at port %s...\n", argv[2]);
-          int t = start_server(argv[2]);
-          send_recv_video(t);
+        int character_id = strtol(argv[2], NULL, 10);
+        if (argc == 4) {
+          fprintf(stderr, "start server at port %s...\n", argv[3]);
+          int t = start_server(argv[3]);
+          send_recv_video(t, character_id);
         }
-        else if (argc == 4) {
-          fprintf(stderr, "connect to %s:%s...\n", argv[2], argv[3]);
-          int t = connect_server(argv[2], argv[3]);
-          send_recv_video(t);
+        else if (argc == 5) {
+          fprintf(stderr, "connect to %s:%s...\n", argv[3], argv[4]);
+          int t = connect_server(argv[3], argv[4]);
+          send_recv_video(t, character_id);
         }
         else {
-          die("wrong usage: ./phone video [port] [port] or ./phone video [ip] [port] [port]");
+          die("wrong usage: ./phone video [charaID] [port] [port] or ./phone video [charaID] [ip] [port] [port]");
         }
       }
       else {

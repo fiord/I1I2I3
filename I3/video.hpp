@@ -17,6 +17,6 @@
 #include "connect.hpp"
 #include "log.hpp"
 
-extern void send_recv_video(int);
+extern void send_recv_video(int, int);
 
 #endif // INCLUDE_GUARD_IMG_HPP
