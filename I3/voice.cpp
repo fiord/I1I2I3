@@ -202,8 +202,6 @@ void recv_voice(int s) {
       sound_out = popen("play -q -t raw -b 16 -c 1 -e s -r 44100 -", "w");
     }
     else if (your_com_buf == 'h') {
-      pclose(sound_out);
-      sound_out = popen("play --buffer 256 -q -t raw -b 16 -c 1 -e s -r 44100 -", "w");
       FILE *music = fopen("sound/for_horyu.raw", "r");
       if (music == NULL) die("failed to open music\n");
       while (1) {
@@ -220,8 +218,6 @@ void recv_voice(int s) {
         }
       }
       fclose(music);
-      pclose(sound_out);
-      sound_out = popen("play -q -t raw -b 16 -c 1 -e s -r 44100 -", "w");
     }
     else {
       int n = recv(s, buf, sizeof(short) * PACKET_SIZE, 0);

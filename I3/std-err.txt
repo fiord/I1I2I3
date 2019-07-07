@@ -1,14 +1,28 @@
-[info] success to connect:rerec WARN alsa: can't encode 0-bit Unknown or not applicablplay WARN alsa: can't encode 0-bit Unknown or not applicable
-plplay WARN alsaununder-r
-play WARN alsa: can't encode 0-bit Unknown or not applicable
-rec WARN alsa: can't encode 0-bit Unknown or not applicable
+[info] success to connect:rec WARN alsa: can't encode 0-bit Unknown or not applicable
+plarec WARN alsa: can't encode 0-bit Unknown or not applicablplplay WARN alsaununder-r
+plplay WARN alsa: under-ruplplay WARN alsa: under-run
+play WARN alsa: under-ruplrec WARN alsa: can't encode 0-bit Unknown or not applicablerplay WARN alsa: can't encode 0-bit Unknown or not applicable
+play WARN alsa: under-run
+ay WARN alsa: under-run
 play WARN alsa: under-run
 play WARN alsa: under-run
 play WARN alsa: under-run
 play WARN alsa: under-run
-play WARN aplay WARN alsa: can't encode 0-bit Unknown or not applicable
 play WARN alsa: under-run
-r-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
+play WARN alsa: under-run
 play WARN alsa: under-run
 play WARN alsa: can't encode 0-bit Unknown or not applicable
 play WARN alsa: under-run
