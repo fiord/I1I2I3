@@ -1,4 +1,5 @@
 #include <ncurses.h>
+#include <locale.h>
 #include "voice.hpp"
 
 #define PACKET_SIZE 1024
@@ -28,6 +29,7 @@ void get_command(WINDOW *for_read) {
   while(1) {
     if (my_command == 'q' || your_command == 'q') return;
     while ((buf = wgetch(for_read)) != '\n') {
+      if (your_command == 'h') continue;
       if (buf == ' ') {
         y_now = 1 - y_now;
         write_cursor(for_read, y_now);
@@ -75,9 +77,9 @@ void display() {
       mutex.lock();
       wclear(for_write);
       wmove(for_write, 0, 0);
-      if (my_com_buf == 'h') waddstr(for_write, "horyu-chu\n\n\n  tsu-wanimdoru\n  tsu-wayameru");
-      else if (your_com_buf == 'h') waddstr(for_write, "horyu-sareteru\n\n\n  tsu-wayameru\n  nanimosinai");
-      else waddstr(for_write, "tsu-wachu\n\n\n  horyu-suru\n  tu-wayameru");
+      if (my_com_buf == 'h') waddstr(for_write, "holding\n\n\n  back to talk\n  hang up");
+      else if (your_com_buf == 'h') waddstr(for_write,"on hold\n\n\n  hang up");
+      else waddstr(for_write, "talking\n\n\n  hold\n  hang up");
       wmove(for_write, 1, 0);
       wprintw(for_write, "time : %02d:%02d", time/60, time%60);
       wrefresh(for_write);
@@ -100,6 +102,7 @@ void display() {
   }
 
   get_commander.detach();
+
   wclear(for_read);
   wclear(for_write);
   wrefresh(for_read);
