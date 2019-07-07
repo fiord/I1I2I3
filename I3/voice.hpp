@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <thread>
 #include <chrono>
+#include <complex>
 #include <mutex>
 #include "log.hpp"
 

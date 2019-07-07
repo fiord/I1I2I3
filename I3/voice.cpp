@@ -1,9 +1,10 @@
 #include <ncurses.h>
-#include <locale.h>
 #include "voice.hpp"
 
-#define PACKET_SIZE 1024
-#define cut_volume 30
+#define PACKET_SIZE 1025
+#define cut_volume 500
+#define smallest_fre 100
+#define largest_fre 5000
 
 char my_command = 0;
 char your_command = 0;
@@ -111,27 +112,76 @@ void display() {
   delwin(for_write);
   endwin();
 }
+
+void fft_r(std::complex<double> *x, std::complex<double> *y, int n, std::complex<double> w) {
+  if (n == 1) y[0] = x[0];
+  else {
+    std::complex<double> W = 1.0;
+    for (int i=0; i<n/2; i++) {
+      y[i] = x[i] + x[i+n/2];
+      y[i+n/2] = W * (x[i] - x[i+n/2]);
+      W *= w;
+    }
+    fft_r(y, x, n/2, w*w);
+    fft_r(y+n/2, x+n/2, n/2, w*w);
+    for (int i=0; i<n/2; i++) {
+      y[2*i] = x[i];
+      y[2*i+1] = x[i+n/2];
+    }
+  }
+}
+
+void bandpass(short *buf, std::complex<double> *x, std::complex<double> *y) {
+  int n = PACKET_SIZE-1;
+  for (int i=0; i<n; i++) {
+    x[i] = buf[i+1];
+  }
+  double arg = 2.0 * M_PI / n;
+  std::complex<double> w(cos(arg), -sin(arg));
+  fft_r(x, y, n, w);
+  for (int i=0; i<n; i++) {
+    y[i] /= n;
+  }
+  for (int i=0; i<=n/2; i++) {
+    double buf = i * 44100 / (double)n;
+    if (buf <= smallest_fre || buf >= largest_fre) {
+      if (i == 0) y[0] = 0.0;
+      else if (i == n/2) y[i] == 0.0;
+      else {
+        y[i] = 0.0;
+        y[n-i] = y[i];
+      }
+    }
+  }
+  w = std::complex<double> (cos(arg), sin(arg));
+  fft_r(y, x, n, w);
+  for (int i=0; i<n; i++) {
+    buf[i+1] = x[i].real();
+  }
+}
  
 void zero_fill(short *buf) {
   for (int i=0; i<PACKET_SIZE-1; i++) {
     if (abs(buf[i]) > cut_volume) return;
   }
   for (int i=0; i<PACKET_SIZE-1; i++) {
-    buf[i] = 0;
+    buf[i] = (short)0;
   }
 }
 
 void send_voice(int s) {
-  FILE *sound_in = popen("rec -q -t raw -b 16 -c 1 -e s -r 44100 -", "r");
+  FILE *sound_in = popen("rec -t raw -b 16 -c 1 -e s -r 44100 -", "r");
   if (sound_in == NULL) die("failed to invoke rec\n");
-  short *buf = (short*)malloc(sizeof(short) * PACKET_SIZE);
+  short *buf = (short *)malloc(sizeof(short) * PACKET_SIZE);
+  std::complex<double> *x = (std::complex<double> *)calloc(sizeof(std::complex<double>), PACKET_SIZE-1);
+  std::complex<double> *y = (std::complex<double> *)calloc(sizeof(std::complex<double>), PACKET_SIZE-1);
 
   char my_com_buf = -1, your_com_buf = -1;
   while (1) {
     my_com_buf = my_command, your_com_buf = your_command;
 
     if (my_com_buf == 'q') {
-      buf[0] = 'q';
+      buf[0] = (short)('q');
       send(s, buf, PACKET_SIZE*sizeof(short), 0);
       break;
     }
@@ -140,34 +190,35 @@ void send_voice(int s) {
     }
     else if (my_com_buf == 'h') {
       pclose(sound_in);
-      buf[0] = 'h';
+      buf[0] = (short)('h');
       send(s, buf, PACKET_SIZE*sizeof(short), 0);
       while (1) {
         my_com_buf = my_command;
 
         if (my_com_buf == 'f') {
-          buf[0] = 'f';
+          buf[0] = (short)('f');
           break;
         }
         else if (my_com_buf == 'q') {
-          buf[0] = 'q';
+          buf[0] = (short)('q');
           break;
         }
 
         sleep(0.05);
       }
       send(s, buf, PACKET_SIZE*sizeof(short), 0);
-      sound_in = popen("rec -q -t raw -b 16 -c 1 -e s -r 44100 -", "r");
+      sound_in = popen("rec -t raw -b 16 -c 1 -e s -r 44100 -", "r");
     }
     else if (your_com_buf == 'h') {
       pclose(sound_in);
       recv(s, buf, PACKET_SIZE*sizeof(short), 0);
       your_command = (char)(buf[0]);
-      sound_in = popen("rec -q -t raw -b 16 -c 1 -e s -r 44100 -", "r");
+      sound_in = popen("rec -t raw -b 16 -c 1 -e s -r 44100 -", "r");
     }
     else {
       buf[0] = 0;
       int n = fread(buf+1, sizeof(short), PACKET_SIZE-1, sound_in);
+      bandpass(buf, x, y);
       zero_fill(buf+1);
       int m = send(s, buf, PACKET_SIZE*sizeof(short), 0);
       if ((n+1)*sizeof(short) != m) die("failed to send sound data");
@@ -182,7 +233,7 @@ void send_voice(int s) {
 }
 
 void recv_voice(int s) {
-  FILE *sound_out = popen("play -q -t raw -b 16 -c 1 -e s -r 44100 -", "w");
+  FILE *sound_out = popen("play -t raw -b 16 -c 1 -e s -r 44100 -", "w");
   if (sound_out == NULL) die("failed to invoke play\n");
   short *buf = (short *)malloc(sizeof(short) * PACKET_SIZE);
 
@@ -199,7 +250,7 @@ void recv_voice(int s) {
 
         sleep(0.05);
       }
-      sound_out = popen("play -q -t raw -b 16 -c 1 -e s -r 44100 -", "w");
+      sound_out = popen("play -t raw -b 16 -c 1 -e s -r 44100 -", "w");
     }
     else if (your_com_buf == 'h') {
       FILE *music = fopen("sound/for_horyu.raw", "r");
