@@ -5,4 +5,5 @@
 **/Makefile
 I3/phone
 I3/test/test
+I3/std-err.txt
 **/vrphone.x86_64
