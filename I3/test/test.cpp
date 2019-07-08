@@ -1,42 +1,3 @@
-#include <netinet/in.h>
-#include <netinet/ip.h>
-#include <netinet/tcp.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <errno.h>
-#include <unistd.h>
-#define TCP_STREAM SOCK_STREAM
-#define UDP_STREAM SOCK_DGRAM
-
-void die(char *s) {
-  fprintf(stderr, "%s\n", s);
-  exit(1);
-}
-int connect_server(char *arg_ip, char *arg_port) {
-  char *to_addr = arg_ip;
-  char **endptr = NULL;
-  int to_port = strtol(arg_port, endptr, 0);
-  if (endptr != NULL) die("port is not valid");
-  int s = socket(PF_INET, UDP_STREAM, 0);
-  if (s == 1) die("socket error");
-  struct sockaddr_in addr;
-  addr.sin_family = AF_INET;
-  int ret = inet_aton(to_addr, &addr.sin_addr);
-  if (ret ==-1) die("ip address is not valid");
-  addr.sin_port = htons(to_port);
-  ret = connect(s, (struct sockaddr*)&addr, sizeof(addr));
-  if (ret == -1) {
-    die("connect failed");
-  }
-  fprintf(stderr, "[info] connection success\n");
-
-  return s;
-}
-
 #include <opencv2/opencv.hpp>
 #include <opencv2/face.hpp>
 #include <opencv2/face/facemark.hpp>
@@ -129,8 +90,6 @@ int main() {
   vector<pair<Kalman, Kalman>> kalmans(68, make_pair(Kalman(0.5, 2), Kalman(0.5, 2)));
   vector<Kalman> face_kalmans(3, Kalman(0.5, 1));
 
-  int s = connect_server("127.0.0.1", "55555");
-
   while (cap.read(img)) {
     cvtColor(img, gray, COLOR_BGR2GRAY);
     faceDetector.detectMultiScale(gray, faces, 1.1, 3, 0, cv::Size(20, 20));
@@ -156,11 +115,6 @@ int main() {
       vector<double> face_pose = get_head_pose(landmarks[target]);
       swap(face_pose[1], face_pose[2]);
       for(int j = 0; j < 3; j++)  face_pose[j] = face_kalmans[j].guess(face_pose[j]);
-      char buf[18];
-      sprintf(buf, "%.3f %.3f %.3f ", face_pose[0], face_pose[1], face_pose[2]);
-      fprintf(stderr, "%s\n", buf);
-      int m = send(s, buf, sizeof(buf), 0);
-      if (m != sizeof(buf)) die("failed to send data");
     }
 
     cv::imshow("tvphone", img);

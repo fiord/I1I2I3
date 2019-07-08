@@ -69,12 +69,10 @@ int main(int argc, char **argv) {
     }
   }
   catch (const char *str) {
-    if (strcmp(argv[1], "video") == 0) {
-      fprintf(stderr, "[error] %s\n", str);
-      fprintf(stderr, "press enter to exit:");
-      char c;
-      scanf("%c", c);
-    }
+    fprintf(stderr, "[error] %s\n", str);
+    fprintf(stderr, "press enter to exit:");
+    char c;
+    scanf("%c", c);
   }
   return 0;
 }

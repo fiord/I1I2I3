@@ -111,9 +111,9 @@ void send_video(int s, int id) {
         }
       }
       // kalman filterに入れる前に瞬き・口の大きさは取る(消えるため)
-      float right_eye = (cv::norm(landmarks[target][38] - landmarks[target][42]) + cv::norm(landmarks[target][39] - landmarks[target][41])) / (2.0 * cv::norm(landmarks[target][37] - landmarks[target][40]));
-      float left_eye = (cv::norm(landmarks[target][44] - landmarks[target][48]) + cv::norm(landmarks[target][45] - landmarks[target][47])) / (2.0 * cv::norm(landmarks[target][43] - landmarks[target][46]));
-      float mouth = (cv::norm(landmarks[target][62] - landmarks[target][68]) + cv::norm(landmarks[target][63] - landmarks[target][67]) + cv::norm(landmarks[target][64] - landmarks[target][66])) / (3.0 * cv::norm(landmarks[target][61] - landmarks[target][65]));
+      float right_eye = (cv::norm(landmarks[target][37] - landmarks[target][41]) + cv::norm(landmarks[target][38] - landmarks[target][40])) / (2.0 * cv::norm(landmarks[target][36] - landmarks[target][39]));
+      float left_eye = (cv::norm(landmarks[target][43] - landmarks[target][47]) + cv::norm(landmarks[target][44] - landmarks[target][46])) / (2.0 * cv::norm(landmarks[target][42] - landmarks[target][45]));
+      float mouth = (cv::norm(landmarks[target][61] - landmarks[target][67]) + cv::norm(landmarks[target][62] - landmarks[target][66]) + cv::norm(landmarks[target][63] - landmarks[target][65])) / (3.0 * cv::norm(landmarks[target][62] - landmarks[target][64]));
 
       for (int i = 0; i < landmarks[target].size(); i++) {
         double x = kalmans[i].first.guess(landmarks[target][i].x);
