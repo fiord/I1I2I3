@@ -30,8 +30,7 @@ void get_command(WINDOW *for_read) {
   while(1) {
     if (my_command == 'q' || your_command == 'q') return;
     while ((buf = wgetch(for_read)) != '\n') {
-      if (your_command == 'h') continue;
-      if (buf == ' ') {
+      if (buf == ' ' && your_command != 'h') {
         y_now = 1 - y_now;
         write_cursor(for_read, y_now);
       }
@@ -44,8 +43,7 @@ void get_command(WINDOW *for_read) {
     }
     else if (y_now == 1) {
       if (my_com_buf == 'h') my_command = 'q';
-      else if (your_com_buf == 'h') ;
-      else my_command = 'q';
+      else if (your_com_buf != 'h') my_command = 'q';
     }
     y_now = 0;
     write_cursor(for_read, y_now);
@@ -181,7 +179,7 @@ void send_voice(int s) {
     my_com_buf = my_command, your_com_buf = your_command;
 
     if (my_com_buf == 'q') {
-      buf[0] = (short)('q');
+      buf[0] = 'q';
       send(s, buf, PACKET_SIZE*sizeof(short), 0);
       break;
     }
@@ -190,17 +188,17 @@ void send_voice(int s) {
     }
     else if (my_com_buf == 'h') {
       pclose(sound_in);
-      buf[0] = (short)('h');
+      buf[0] = 'h';
       send(s, buf, PACKET_SIZE*sizeof(short), 0);
       while (1) {
         my_com_buf = my_command;
 
         if (my_com_buf == 'f') {
-          buf[0] = (short)('f');
+          buf[0] = 'f';
           break;
         }
         else if (my_com_buf == 'q') {
-          buf[0] = (short)('q');
+          buf[0] = 'q';
           break;
         }
 
