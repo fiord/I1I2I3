@@ -217,10 +217,10 @@ void send_voice(int s) {
     }
     else {
       buf[0] = 0;
-      int n = fread(buf+1, sizeof(short), PACKET_SIZE-1, sound_in);
+      int n = fread(&buf[1], sizeof(short), PACKET_SIZE-1, sound_in);
       // bandpass(buf, x, y);
       zero_fill(buf+1);
-      int m = send(s, buf, PACKET_SIZE*sizeof(short), 0);
+      int m = send(s, buf, (n+1)*sizeof(short), 0);
       if ((n+1)*sizeof(short) != m) die("failed to send sound data");
     }
 
@@ -280,7 +280,7 @@ void recv_voice(int s) {
         your_command = 'h';
       }
       else {
-        fwrite(buf+1, sizeof(short), n/sizeof(short)-1, sound_out);
+        fwrite(&buf[1], 1, n-sizeof(short), sound_out);
       }
     }
     
@@ -289,8 +289,8 @@ void recv_voice(int s) {
 #endif
   }
 
-  system("play -q -t raw -b 16 -c 1 -e s -r 44100 sound/end.raw");
   pclose(sound_out);
+  system("play -q -t raw -b 16 -c 1 -e s -r 44100 sound/end.raw");
   free(buf);
 }
 
