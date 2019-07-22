@@ -7,8 +7,4 @@ I3ディレクトリの中で，
 $ cmake .
 $ make
 ```
-でopencv関係のビルドができます．ただし，元々opencvを導入している必要があるので，
-```sh
-$ sudo apt install libopencv-dev
-```
-でインストールしてあげてください．
+でopencv関係のビルドができます．ただし，元々opencv(opencv_contrib含む)を導入している必要があるので各自インストールをしてください。
